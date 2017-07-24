@@ -1,0 +1,26 @@
+<nav class="navbar is-primary">
+  <div class="navbar-brand">
+    <a routerLink="/" class="navbar-item">PB</a>
+  </div>
+  <div class="navbar-start">
+    <a routerLink="/" class="navbar-item">Dashboard</a>
+    <a routerLink="/add-account" class="navbar-item">
+      <span class="icon"><i class="fa fa-plus"></i></span>
+      Add account
+    </a>
+  </div>
+  <div class="navbar-end">
+    <a *ngIf="!isLoggedIn" routerLink="/login" class="navbar-item">
+      Login
+    </a>
+    <a *ngIf="isLoggedIn" class="navbar-item">
+      {{username}}
+    </a>
+    <a *ngIf="isLoggedIn" routerLink="/logout" class="navbar-item">
+      Logout
+    </a>
+  </div>
+</nav>
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
