@@ -1,3 +1,19 @@
-<p>
-  login works!
-</p>
+<div class="container">
+  <div class="columns">
+    <div class="column is-6 is-offset-3">
+      <form (ngSubmit)="login()" [formGroup]="loginForm">
+        <div class="field">
+          <label class="label">Username</label>
+          <input class="input" formControlName="username">
+        </div>
+        <div class="field">
+          <label class="label">Password</label>
+          <input type="password" class="input" formControlName="password">
+        </div>
+        <div class="field">
+          <button class="button is-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

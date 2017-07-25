@@ -10,11 +10,11 @@
     </a>
   </div>
   <div class="navbar-end">
+    <a class="navbar-item">
+      {{username}}
+    </a>
     <a *ngIf="!isLoggedIn" routerLink="/login" class="navbar-item">
       Login
-    </a>
-    <a *ngIf="isLoggedIn" class="navbar-item">
-      {{username}}
     </a>
     <a *ngIf="isLoggedIn" routerLink="/logout" class="navbar-item">
       Logout

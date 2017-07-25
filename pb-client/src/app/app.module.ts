@@ -6,10 +6,16 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { UserService } from './service/user.service';
+
+import 'rxjs/add/observable/of';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       {
         path: 'dashboard',
@@ -36,7 +42,7 @@ import { LogoutComponent } from './logout/logout.component';
     LoginComponent,
     LogoutComponent,
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
