@@ -16,6 +16,12 @@
           <td>{{totalCash}}</td>
         </tr>
         </tfoot>
+        <tbody *ngIf="accounts">
+          <tr *ngFor="let account of accounts">
+            <td>{{account.name}}</td>
+            <td></td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="column">

@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../service/user.service';
@@ -12,6 +13,8 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(private fb: FormBuilder,
               private userService: UserService,
               private router: Router) { }
@@ -25,8 +28,13 @@ export class LoginComponent implements OnInit {
 
   public login(): void {
     if (this.loginForm.valid) {
-      this.userService.login(this.loginForm.value.username, this.loginForm.value.password);
-      this.router.navigateByUrl('/');
+      this.subscriptions.push(this.userService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(
+        result => {
+          if (result) {
+            this.router.navigateByUrl('/');
+          }
+        }
+      ));
     }
   }
 

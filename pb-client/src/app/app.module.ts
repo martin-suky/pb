@@ -9,6 +9,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { UserService } from './service/user.service';
 
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ChartsModule } from 'ng2-charts';

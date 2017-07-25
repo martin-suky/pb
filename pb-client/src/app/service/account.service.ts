@@ -1,3 +1,5 @@
+import { Account } from './../dto/account';
+import { Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { UserHttpService } from './user-http.service';
@@ -7,7 +9,7 @@ export class AccountService {
 
   constructor(private http: UserHttpService) { }
 
-  public getAccounts(): Observable<Account> {
+  public getAccounts(): Observable<Account[]> {
     return this.http.get('/api/account');
   }
 

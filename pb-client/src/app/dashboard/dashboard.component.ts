@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   //--------------------------------------------
   public user: User;
   public totalCash: number = 0;
+  public accounts: Account[];
 
   private subscriptions: Subscription[] = [];
 
@@ -36,7 +37,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       value => this.user = value
     ));
     this.subscriptions.push(this.accountService.getAccounts().subscribe(
-      value => console.log(value)
+      value => this.accounts = value
     ));
   }
 
