@@ -12,6 +12,8 @@ import 'rxjs/add/observable/of';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ChartsModule } from 'ng2-charts';
+import { AccountService } from './service/account.service';
+import { UserHttpService } from './service/user-http.service';
 
 @NgModule({
   imports: [
@@ -46,7 +48,10 @@ import { ChartsModule } from 'ng2-charts';
     LoginComponent,
     LogoutComponent,
   ],
-  providers: [UserService],
+  providers: [
+    AccountService,
+    UserHttpService,
+    UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

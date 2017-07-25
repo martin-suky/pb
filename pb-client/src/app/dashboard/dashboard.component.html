@@ -1,9 +1,32 @@
 <div *ngIf="user">
-  <h1>Dashboard</h1>
-  <canvas baseChart width="400" height="400"
-          [datasets]="lineChartData"
-          [labels]="lineChartLabels"
-          [options]="lineChartOptions"
-          [legend]="lineChartLegend"
-          [chartType]="lineChartType"></canvas>
+  <h1 class="title">Dashboard</h1>
+  <div class="columns">
+    <div class="column is-3">
+      <h2 class="subtitle">Accounts</h2>
+      <table class="table">
+        <thead>
+        <tr>
+          <td>Name</td>
+          <td>Cash</td>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <td>Total</td>
+          <td>{{totalCash}}</td>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="column">
+      <h2 class="subtitle">Overview</h2>
+      <canvas baseChart width="400" height="400"
+              [datasets]="lineChartData"
+              [labels]="lineChartLabels"
+              [options]="lineChartOptions"
+              [legend]="lineChartLegend"
+              [chartType]="lineChartType"></canvas>
+    </div>
+  </div>
+
 </div>

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../service/user.service';
 import { User } from '../dto/user';
+import { AccountService } from '../service/account.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,8 +10,6 @@ import { User } from '../dto/user';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-
-  public user: User;
 
   public lineChartData:Array<any> = [
     {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
@@ -24,13 +23,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
 
+  //--------------------------------------------
+  public user: User;
+  public totalCash: number = 0;
+
   private subscriptions: Subscription[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private accountService: AccountService) {}
 
   ngOnInit(): void {
     this.subscriptions.push(this.userService.$userObservable.subscribe(
       value => this.user = value
+    ));
+    this.subscriptions.push(this.accountService.getAccounts().subscribe(
+      value => console.log(value)
     ));
   }
 
