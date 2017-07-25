@@ -10,11 +10,15 @@ import { UserService } from './service/user.service';
 
 import 'rxjs/add/observable/of';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
     BrowserModule,
+    ChartsModule,
     FormsModule,
+    HttpModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
       {

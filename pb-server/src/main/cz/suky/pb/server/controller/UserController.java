@@ -1,11 +1,12 @@
 package cz.suky.pb.server.controller;
 
 import cz.suky.pb.server.domain.User;
+import cz.suky.pb.server.dto.LoginRequest;
+import cz.suky.pb.server.exception.UserException;
+import cz.suky.pb.server.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * User controller
@@ -14,11 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUser(@PathVariable("userId") Long userId) {
-        User user = new User();
-        user.setId(userId);
-        user.setUsername("test");
+    @Autowired
+    private UserRepository userRepository;
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest) {
+        User user = userRepository.findByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword());
+        if (user == null) {
+            throw UserException.notAuthorized();
+        }
         return ResponseEntity.ok(user);
     }
 }
