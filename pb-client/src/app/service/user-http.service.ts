@@ -23,8 +23,16 @@ export class UserHttpService {
     if (!this.user) {
       return Observable.of(null);
     }
- 
+
     return <Observable<T>> <any> this.http.get(url, this.getOptions(options)).map((value: Response) => {return value.json()});
+  }
+
+  public post<T>(url: string, body: any, options?: RequestOptionsArgs ): Observable<T> {
+    if (!this.user) {
+      return Observable.of(null);
+    }
+
+    return <Observable<T>> <any> this.http.post(url, body, this.getOptions(options)).map((value: Response) => {return value.json()});
   }
 
   private getOptions(options: RequestOptionsArgs): RequestOptionsArgs {

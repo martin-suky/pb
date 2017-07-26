@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="columns">
+    <div class="column is-6 is-offset-3">
+      <form (ngSubmit)="saveAccount()" [formGroup]="accountForm">
+        <div class="field">
+          <label class="label">Name</label>
+          <input class="input" formControlName="name">
+        </div>
+        <div class="field">
+          <label class="label">Bank</label>
+          <div class="select">
+            <select formControlName="bank">
+              <option *ngFor="let item of banks" [value]="item">{{item}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <button class="button is-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -3,13 +3,11 @@ package cz.suky.pb.server.controller;
 import cz.suky.pb.server.domain.Account;
 import cz.suky.pb.server.domain.User;
 import cz.suky.pb.server.dto.CreateAccountRequest;
+import cz.suky.pb.server.exception.AccountException;
 import cz.suky.pb.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +24,15 @@ public class AccountController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Account>> getAccounts(User user) {
         return ResponseEntity.ok(accountRepository.findAccountsByOwner(user));
+    }
+
+    @RequestMapping(value = "/{accountId}", method = RequestMethod.GET)
+    public ResponseEntity<Account> getAccount(User user, @PathVariable Long accountId) {
+        Account account = accountRepository.findAccountByOwnerAndId(user, accountId);
+        if (null == account) {
+            throw AccountException.notFound();
+        }
+        return ResponseEntity.ok(account);
     }
 
     @RequestMapping(method = RequestMethod.POST)

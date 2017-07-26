@@ -15,6 +15,8 @@ import { HttpModule } from '@angular/http';
 import { ChartsModule } from 'ng2-charts';
 import { AccountService } from './service/account.service';
 import { UserHttpService } from './service/user-http.service';
+import { AddAccountComponent } from './add-account/add-account.component';
+import { AccountDetailComponent } from './account-detail/account-detail.component';
 
 @NgModule({
   imports: [
@@ -37,6 +39,14 @@ import { UserHttpService } from './service/user-http.service';
         component: LogoutComponent
       },
       {
+        path: 'add-account',
+        component: AddAccountComponent
+      },
+      {
+        path: 'account/:id',
+        component: AccountDetailComponent
+      },
+      {
         path: '',
         redirectTo: '/dashboard',
         pathMatch: 'full'
@@ -48,6 +58,8 @@ import { UserHttpService } from './service/user-http.service';
     DashboardComponent,
     LoginComponent,
     LogoutComponent,
+    AddAccountComponent,
+    AccountDetailComponent,
   ],
   providers: [
     AccountService,
