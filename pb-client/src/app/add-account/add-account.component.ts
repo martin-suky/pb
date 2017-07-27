@@ -3,6 +3,7 @@ import { Bank } from '../dto/bank';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CreateAccountRequest } from '../dto/create-account-request';
 import { AccountService } from '../service/account.service';
+import { NotificationService } from '../service/notification.service';
 
 @Component({
   selector: 'app-add-account',
@@ -14,7 +15,7 @@ export class AddAccountComponent implements OnInit {
   accountForm: FormGroup;
   public banks:Bank[] = [Bank.MBANK];
 
-  constructor(private fb: FormBuilder, private accountService: AccountService) { }
+  constructor(private fb: FormBuilder, private accountService: AccountService, private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.accountForm = this.fb.group({
@@ -30,7 +31,10 @@ export class AddAccountComponent implements OnInit {
         bank: this.accountForm.value.bank,
       };
 
-      this.accountService.saveAccount(accountRequest).subscribe();
+      this.accountService.saveAccount(accountRequest).subscribe(success => {
+        this.notificationService.displaySuccess('Account created');
+        this.accountForm.reset();
+      });
     }
   }
 

@@ -17,6 +17,8 @@ import { AccountService } from './service/account.service';
 import { UserHttpService } from './service/user-http.service';
 import { AddAccountComponent } from './add-account/add-account.component';
 import { AccountDetailComponent } from './account-detail/account-detail.component';
+import { NotificationComponent } from './notification/notification.component';
+import { NotificationService } from './service/notification.service';
 
 @NgModule({
   imports: [
@@ -60,9 +62,11 @@ import { AccountDetailComponent } from './account-detail/account-detail.componen
     LogoutComponent,
     AddAccountComponent,
     AccountDetailComponent,
+    NotificationComponent,
   ],
   providers: [
     AccountService,
+    NotificationService,
     UserHttpService,
     UserService],
   bootstrap: [AppComponent]

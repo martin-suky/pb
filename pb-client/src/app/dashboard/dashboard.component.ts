@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../service/user.service';
 import { User } from '../dto/user';
 import { AccountService } from '../service/account.service';
+import { Account } from '../dto/account';
 
 @Component({
   selector: 'app-dashboard',
