@@ -1,11 +1,14 @@
-<article *ngFor="let notification of notifications" class="message" [ngClass]="{'is-success' : (notification.type === NotificationType.SUCCESS),
-                                                                                'is-warning' : (notification.type === NotificationType.WARNING),
-                                                                                'is-danger' : (notification.type === NotificationType.DANGER)}">
-  <div class="message-header">
-    <p>{{notification.title}}</p>
-    <button class="delete"></button>
+<div *ngFor="let notification of notifications" class="modal is-active" (click)="close(notification)"> 
+  <div class="modal-content">
+    <article class="message" [ngClass]="{'is-success' : (notification.type === NotificationType.SUCCESS),
+                                                                                    'is-warning' : (notification.type === NotificationType.WARNING),
+                                                                                    'is-danger' : (notification.type === NotificationType.DANGER)}">
+      <div class="message-header">
+        <p>{{notification.title}}</p>
+      </div>
+      <div class="message-body">
+        {{notification.message}}
+      </div>
+    </article>
   </div>
-  <div class="message-body">
-    {{notification.message}}
-  </div>
-</article>
+</div>

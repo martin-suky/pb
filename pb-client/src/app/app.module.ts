@@ -19,6 +19,7 @@ import { AddAccountComponent } from './add-account/add-account.component';
 import { AccountDetailComponent } from './account-detail/account-detail.component';
 import { NotificationComponent } from './notification/notification.component';
 import { NotificationService } from './service/notification.service';
+import { TitleComponent } from './title/title.component';
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import { NotificationService } from './service/notification.service';
     AddAccountComponent,
     AccountDetailComponent,
     NotificationComponent,
+    TitleComponent,
   ],
   providers: [
     AccountService,

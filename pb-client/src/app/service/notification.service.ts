@@ -10,7 +10,8 @@ export class NotificationService {
 
   constructor() { }
 
-  public displayNotification(notification:Notification): void {
+  private displayNotification(notification:Notification): void {
+    console.log('displayed notification.', notification);
     this.subject.next(notification);
   }
 
@@ -19,6 +20,14 @@ export class NotificationService {
       message: message,
       type: NotificationType.SUCCESS,
       title: 'Success'
+    });
+  }
+
+  public displayError(message: string): void {
+    this.displayNotification({
+      message: message,
+      type: NotificationType.DANGER,
+      title: 'Error'
     });
   }
 

@@ -1,3 +1,4 @@
+import { NotificationService } from './../service/notification.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private userService: UserService,
-              private router: Router) { }
+              private router: Router,
+              private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -32,6 +34,8 @@ export class LoginComponent implements OnInit {
         result => {
           if (result) {
             this.router.navigateByUrl('/');
+          } else {
+            this.notificationService.displayError('Login failed.');
           }
         }
       ));

@@ -20,7 +20,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.notificationService.$observable.subscribe(value => {
       this.notifications.unshift(value);
       setTimeout(() => {
-        this.notifications.pop();
+        this.close(value);
       }, 10000);
 
     }));
@@ -28,6 +28,13 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  close(notification: Notification): void {
+    var index = this.notifications.indexOf(notification);
+    if (index > -1) {
+      this.notifications.splice(index, 1);
+    }
   }
 }
 
