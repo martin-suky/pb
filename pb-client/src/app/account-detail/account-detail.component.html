@@ -1,4 +1,25 @@
 <div *ngIf="account">
   <app-title>Account Detail: {{account.name}} ({{account.bank}})</app-title>
-
+  <div class="columns">
+    <div class="column is-4"></div>
+    <div class="column is-4">
+      <div class="columns">
+        <div class="column is-4">
+          <a class="button is-primary"><span class="icon"><i class="fa fa-arrow-left"></i></span></a>
+        </div>
+        <div class="column is-4">
+          Current month: {{month}}/{{year}}
+        </div>
+        <div class="column is-4">
+          <a class="button is-primary"><span class="icon"><i class="fa fa-arrow-right"></i></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="column is-4"></div>
+  </div>
+  <div class="columns">
+    <div *ngFor="let month of months" class="column is-4">
+      <app-month [month]="month"></app-month>
+    </div>
+  </div>
 </div>

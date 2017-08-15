@@ -22,6 +22,7 @@ import { NotificationService } from './service/notification.service';
 import { TitleComponent } from './title/title.component';
 import { UploadComponent } from './upload/upload.component';
 import { TransactionService } from './service/transaction.service';
+import { MonthComponent } from './month/month.component';
 
 @NgModule({
   imports: [
@@ -72,6 +73,7 @@ import { TransactionService } from './service/transaction.service';
     NotificationComponent,
     TitleComponent,
     UploadComponent,
+    MonthComponent,
   ],
   providers: [
     AccountService,
