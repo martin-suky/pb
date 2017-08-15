@@ -1,0 +1,49 @@
+<div *ngIf="account">
+  <app-title>Upload to: {{account.name}} ({{account.bank}})</app-title>
+  <div class="columns">
+    <div class="column is-6 is-offset-3">
+      <form (ngSubmit)="upload()" [formGroup]="uploadForm">
+        <div class="field">
+          <div class="file has-name">
+            <label class="file-label">
+              <input class="file-input" type="file" formControlName="file" (change)="fileChange($event)">
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fa fa-upload"></i>
+                </span>
+                <span class="file-label">Choose a file…</span>
+              </span>
+              <span class="file-name">{{file?.name}}</span>
+            </label>
+          </div>
+        </div>
+        <div class="field">
+          <button class="button is-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="columns">
+    <div class="column is-6 is-offset-3">
+      <table class="table">
+        <thead>
+        <tr>
+          <td>FileName</td>
+          <td>Parsed #</td>
+          <td>Stored #</td>
+          <td>Duplicate #</td>
+        </tr>
+        </thead>
+        <tbody *ngIf="uploadResults">
+        <tr *ngFor="let result of uploadResults">
+          <td>{{result.fileName}}</td>
+          <td>{{result.uploadResponse.parsed}}</td>
+          <td>{{result.uploadResponse.stored}}</td>
+          <td>{{result.uploadResponse.duplicate}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

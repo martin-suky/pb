@@ -48,6 +48,6 @@ public class TransactionController {
     @RequestMapping(value = "/search",method = RequestMethod.POST)
     public ResponseEntity<List<Transaction>> searchTransaction(User user, @PathVariable Long accountId, @RequestBody TransactionSearch searchParams) {
         Account accountByOwnerAndId = accountRepository.findAccountByOwnerAndId(user, accountId);
-        return ResponseEntity.ok(transactionRepository.findByAccountAndDateOfTransactionBetween(accountByOwnerAndId, searchParams.getFrom(), searchParams.getTo()));
+        return ResponseEntity.ok(transactionRepository.findByAccountAndDateBetweenOrderByDate(accountByOwnerAndId, searchParams.getFrom(), searchParams.getTo()));
     }
 }

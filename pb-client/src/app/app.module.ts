@@ -20,6 +20,8 @@ import { AccountDetailComponent } from './account-detail/account-detail.componen
 import { NotificationComponent } from './notification/notification.component';
 import { NotificationService } from './service/notification.service';
 import { TitleComponent } from './title/title.component';
+import { UploadComponent } from './upload/upload.component';
+import { TransactionService } from './service/transaction.service';
 
 @NgModule({
   imports: [
@@ -50,6 +52,10 @@ import { TitleComponent } from './title/title.component';
         component: AccountDetailComponent
       },
       {
+        path: 'upload/:id',
+        component: UploadComponent
+      },
+      {
         path: '',
         redirectTo: '/dashboard',
         pathMatch: 'full'
@@ -65,10 +71,12 @@ import { TitleComponent } from './title/title.component';
     AccountDetailComponent,
     NotificationComponent,
     TitleComponent,
+    UploadComponent,
   ],
   providers: [
     AccountService,
     NotificationService,
+    TransactionService,
     UserHttpService,
     UserService],
   bootstrap: [AppComponent]

@@ -23,10 +23,6 @@
 </nav>
 <app-notification></app-notification>
 <div>
-  <section *ngIf="!isLoggedIn" class="hero is-primary">
-    <div class="hero-body">
-      <h1 class="title">Please, login!</h1>
-    </div>
-  </section>
+  <app-title *ngIf="!isLoggedIn">Please, login!</app-title>
   <router-outlet></router-outlet>
 </div>

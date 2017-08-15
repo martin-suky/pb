@@ -12,27 +12,18 @@ import java.time.LocalDateTime;
 public class Transaction extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
-    private Long numberOfTransaction;
-    private LocalDateTime dateOfTransaction;
+    private LocalDateTime date;
     private String description;
     private BigDecimal amount;
     @ManyToOne
     private Account account;
 
-    public Long getNumberOfTransaction() {
-        return numberOfTransaction;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setNumberOfTransaction(Long numberOfTransaction) {
-        this.numberOfTransaction = numberOfTransaction;
-    }
-
-    public LocalDateTime getDateOfTransaction() {
-        return dateOfTransaction;
-    }
-
-    public void setDateOfTransaction(LocalDateTime dateOfTransaction) {
-        this.dateOfTransaction = dateOfTransaction;
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public String getDescription() {
@@ -57,5 +48,27 @@ public class Transaction extends AbstractEntity {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Transaction that = (Transaction) o;
+
+        if (!date.equals(that.date)) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (!amount.equals(that.amount)) return false;
+        return account.equals(that.account);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 31 * date.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + amount.hashCode();
+        result = 31 * result + account.hashCode();
+        return result;
     }
 }

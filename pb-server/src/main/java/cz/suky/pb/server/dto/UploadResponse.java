@@ -8,17 +8,37 @@ import java.io.Serializable;
 public class UploadResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int numberOfParsedTransactions;
+    private int parsed;
+    private int stored;
+    private int duplicate;
 
-    public UploadResponse(int numberOfParsedTransactions) {
-        this.numberOfParsedTransactions = numberOfParsedTransactions;
+    public UploadResponse(int parsed, int stored, int duplicate) {
+        this.parsed = parsed;
+        this.stored = stored;
+        this.duplicate = duplicate;
     }
 
-    public int getNumberOfParsedTransactions() {
-        return numberOfParsedTransactions;
+    public int getParsed() {
+        return parsed;
     }
 
-    public void setNumberOfParsedTransactions(int numberOfParsedTransactions) {
-        this.numberOfParsedTransactions = numberOfParsedTransactions;
+    public void setParsed(int parsed) {
+        this.parsed = parsed;
+    }
+
+    public int getStored() {
+        return stored;
+    }
+
+    public void setStored(int stored) {
+        this.stored = stored;
+    }
+
+    public int getDuplicate() {
+        return duplicate;
+    }
+
+    public void setDuplicate(int duplicate) {
+        this.duplicate = duplicate;
     }
 }

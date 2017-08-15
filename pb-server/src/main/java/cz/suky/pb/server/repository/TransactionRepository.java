@@ -12,5 +12,5 @@ import java.util.List;
 public interface TransactionRepository extends AbstractEntityRepository<Transaction> {
     List<Transaction> findByAccount(Account accountByOwnerAndId);
 
-    List<Transaction> findByAccountAndDateOfTransactionBetween(Account accountByOwnerAndId, LocalDateTime from, LocalDateTime to);
+    List<Transaction> findByAccountAndDateBetweenOrderByDate(Account accountByOwnerAndId, LocalDateTime from, LocalDateTime to);
 }

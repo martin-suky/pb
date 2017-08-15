@@ -52,7 +52,7 @@ public class MBankParser extends HtmlParser {
         Transaction transaction = new Transaction();
         Elements tds = row.select("td");
         LocalDate date = LocalDate.parse(tds.get(1).getAllElements().first().text(), dateTimeFormatter);
-        transaction.setDateOfTransaction(LocalDateTime.from(date.atStartOfDay()));
+        transaction.setDate(LocalDateTime.from(date.atStartOfDay()));
         transaction.setDescription(tds.get(2).text());
         transaction.setAmount(parseAmount(tds.get(3).text()));
         return transaction;

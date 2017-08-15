@@ -1,5 +1,5 @@
 <div *ngIf="user">
-  <app-title text="Dashboard"></app-title>
+  <app-title>Dashboard</app-title>
   <div class="columns">
     <div class="column is-3">
       <h2 class="subtitle">Accounts</h2>
@@ -8,18 +8,21 @@
         <tr>
           <td>Name</td>
           <td>Cash</td>
+          <td></td>
         </tr>
         </thead>
         <tfoot>
         <tr>
           <td>Total</td>
           <td>{{totalCash}}</td>
+          <td></td>
         </tr>
         </tfoot>
         <tbody *ngIf="accounts">
           <tr *ngFor="let account of accounts">
             <td><a [routerLink]="['/account', account.id]">{{account.name}}</a></td>
             <td>0</td>
+            <td><a [routerLink]="['/upload', account.id]"><span class="icon"><i class="fa fa-cloud-upload" title="Upload data"></i></span></a></td>
           </tr>
         </tbody>
       </table>
