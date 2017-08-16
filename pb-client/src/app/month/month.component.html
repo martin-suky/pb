@@ -1,29 +1,45 @@
-<h2 class="title">{{month.month}}/{{month.year}}</h2>
-<table class="table">
-  <thead>
+<div *ngIf="month">
+  <h2 class="title">{{month.month}}/{{month.year}}</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <td colspan="2">Overview</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Income:</td>
+      <td>{{income | number:'1.2-2'}}</td>
+    </tr>
+    <tr>
+      <td>Expenses:</td>
+      <td>{{expense | number:'1.2-2'}}</td>
+    </tr>
+    <tr>
+      <td>Balance:</td>
+      <td>{{balance | number:'1.2-2'}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <table class="table">
+    <thead>
     <tr>
       <td>Date</td>
       <td>Description</td>
       <td>Amount</td>
     </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <td>Total</td>
-      <td></td>
-      <td>{{totalCash}}</td>
-    </tr>
-  </tfoot>
-  <tbody *ngIf="month.transactions.length !== 0">
+    </thead>
+    <tbody *ngIf="month.transactions && month.transactions.length !== 0">
     <tr *ngFor="let transaction of month.transactions">
       <td>{{transaction.date}}</td>
       <td>{{transaction.description}}</td>
-      <td>{{transaction.amount}}</td>
+      <td>{{transaction.amount | number:'1.2-2'}}</td>
     </tr>
-  </tbody>
-  <tbody *ngIf="month.transactions.length === 0">
+    </tbody>
+    <tbody *ngIf="month.transactions && month.transactions.length === 0">
     <tr>
       <td colspan="2">No transactions..</td>
     </tr>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>

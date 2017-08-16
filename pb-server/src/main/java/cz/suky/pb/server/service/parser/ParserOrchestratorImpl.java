@@ -40,6 +40,9 @@ public class ParserOrchestratorImpl implements ParserOrchestrator {
         int iteratorExisting = 0;
         int countOfNew = transactions.size();
         List<Transaction> result = new ArrayList<>();
+        if (transactionRepository.count() == 0) {
+            return transactions;
+        }
         transactions.sort(Comparator.comparing(Transaction::getDate));
         List<Transaction> existing = transactionRepository.findByAccountAndDateBetweenOrderByDate(account, transactions.get(0).getDate(), transactions.get(countOfNew - 1).getDate());
         if (existing.isEmpty()) {

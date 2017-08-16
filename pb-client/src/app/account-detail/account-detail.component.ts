@@ -42,6 +42,30 @@ export class AccountDetailComponent implements OnInit {
     ));
   }
 
+  public back(): void {
+    this.months[2] = this.months[1];
+    this.months[1] = this.months[0];
+    this.months[0] = null;
+    this.month --;
+    if (this.month < 1) {
+      this.month += 12;
+      this.year--;
+    }
+    this.fetchMonth(0, this.month -2, this.year);
+  }
+
+  public forward(): void {
+    this.months[0] = this.months[1];
+    this.months[1] = this.months[2];
+    this.months[2] = null;
+    this.month ++;
+    if (this.month > 12) {
+      this.month -= 12;
+      this.year++;
+    }
+    this.fetchMonth(2, this.month, this.year);
+  }
+
   private fetchInitialTransactions(): void {
     this.fetchMonth(0, this.month -2, this.year);
     this.fetchMonth(1, this.month -1, this.year);
