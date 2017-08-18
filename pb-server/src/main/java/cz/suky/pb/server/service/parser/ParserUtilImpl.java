@@ -1,12 +1,15 @@
 package cz.suky.pb.server.service.parser;
 
 import cz.suky.pb.server.domain.Account;
+import cz.suky.pb.server.domain.MonthlyBalance;
 import cz.suky.pb.server.domain.Transaction;
 import cz.suky.pb.server.repository.AccountRepository;
+import cz.suky.pb.server.repository.MonthlyBalanceRepository;
 import cz.suky.pb.server.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -20,10 +23,30 @@ public class ParserUtilImpl implements ParserUtil {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private MonthlyBalanceRepository monthlyBalanceRepository;
+
     @Override
     public void updateAccountBalance(Account account, List<Transaction> transactions) {
+        MonthlyBalance monthlyBalance = null;
         Account updatedAccount = accountRepository.getOne(account.getId());
-        transactions.forEach(transaction -> updatedAccount.setBalance(updatedAccount.getBalance().add(transaction.getAmount())));
+        transactions.sort(Comparator.comparing(Transaction::getDate));
+        for (Transaction transaction : transactions) {
+            int year = transaction.getDate().getYear();
+            int month = transaction.getDate().getMonthValue();
+            if (monthlyBalance == null || monthlyBalance.getYear() != year || monthlyBalance.getMonth() != month) {
+                MonthlyBalance fromDb = monthlyBalanceRepository.findByAccountAndYearAndMonth(updatedAccount, year, month);
+                monthlyBalance = fromDb != null ? fromDb : new MonthlyBalance(year, month);
+            }
+            if (transaction.getAmount().compareTo(BigDecimal.ZERO) > 0) {
+                monthlyBalance.getIncome().add(transaction.getAmount());
+            } else {
+                monthlyBalance.getExpense().add(transaction.getAmount());
+            }
+            monthlyBalance.getBalance().add(transaction.getAmount());
+            updatedAccount.getBalance().add(transaction.getAmount());
+        }
+        monthlyBalanceRepository.save(monthlyBalance);
         accountRepository.save(updatedAccount);
     }
 
