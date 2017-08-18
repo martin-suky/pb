@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -38,6 +39,7 @@ public class AccountController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Account> saveAccount(User user, @RequestBody CreateAccountRequest request) {
         Account account = new Account();
+        account.setBalance(BigDecimal.ZERO);
         account.setBank(request.getBank());
         account.setOwner(user);
         account.setName(request.getName());

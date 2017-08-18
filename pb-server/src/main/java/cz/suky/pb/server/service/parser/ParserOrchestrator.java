@@ -4,6 +4,7 @@ import cz.suky.pb.server.domain.Account;
 import cz.suky.pb.server.domain.MimeType;
 import cz.suky.pb.server.dto.UploadResponse;
 
+import javax.transaction.Transactional;
 import java.io.InputStream;
 
 /**

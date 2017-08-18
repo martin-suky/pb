@@ -21,6 +21,7 @@ export class AccountDetailComponent implements OnInit {
   public year: number;
   public currentMonth: number;
   public currentYear: number;
+  public loading: boolean[] = [];
 
   private subscriptions: Subscription[] = [];
 
@@ -43,6 +44,10 @@ export class AccountDetailComponent implements OnInit {
   }
 
   public back(): void {
+    if (this.loading.length > 0) {
+      return;
+    }
+    this.loading.push(true);
     this.months[2] = this.months[1];
     this.months[1] = this.months[0];
     this.months[0] = null;
@@ -55,6 +60,10 @@ export class AccountDetailComponent implements OnInit {
   }
 
   public forward(): void {
+    if (this.loading.length > 0) {
+      return;
+    }
+    this.loading.push(true);
     this.months[0] = this.months[1];
     this.months[1] = this.months[2];
     this.months[2] = null;
@@ -67,6 +76,7 @@ export class AccountDetailComponent implements OnInit {
   }
 
   private fetchInitialTransactions(): void {
+    this.loading.push(true, true, true);
     this.fetchMonth(0, this.month -2, this.year);
     this.fetchMonth(1, this.month -1, this.year);
     this.fetchMonth(2, this.month, this.year);
@@ -80,6 +90,7 @@ export class AccountDetailComponent implements OnInit {
         year: search.from.getFullYear(),
         transactions: result
       };
+      this.loading.pop();
     }));
   }
 

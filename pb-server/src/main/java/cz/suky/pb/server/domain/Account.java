@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import java.math.BigDecimal;
 
 /**
  * Created by none_ on 10/31/16.
@@ -13,6 +14,7 @@ public class Account extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     private String name;
+    private BigDecimal balance;
     @ManyToOne(optional = false)
     private User owner;
     @Enumerated(EnumType.STRING)
@@ -24,6 +26,14 @@ public class Account extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public User getOwner() {
