@@ -10,9 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
 @Service
 public class ParserUtilImpl implements ParserUtil {
@@ -31,22 +30,17 @@ public class ParserUtilImpl implements ParserUtil {
         MonthlyBalance monthlyBalance = null;
         Account updatedAccount = accountRepository.getOne(account.getId());
         transactions.sort(Comparator.comparing(Transaction::getDate));
+        Set<MonthlyBalance> balances = new HashSet<>();
         for (Transaction transaction : transactions) {
             int year = transaction.getDate().getYear();
             int month = transaction.getDate().getMonthValue();
-            if (monthlyBalance == null || monthlyBalance.getYear() != year || monthlyBalance.getMonth() != month) {
-                MonthlyBalance fromDb = monthlyBalanceRepository.findByAccountAndYearAndMonth(updatedAccount, year, month);
-                monthlyBalance = fromDb != null ? fromDb : new MonthlyBalance(year, month);
-            }
-            if (transaction.getAmount().compareTo(BigDecimal.ZERO) > 0) {
-                monthlyBalance.getIncome().add(transaction.getAmount());
-            } else {
-                monthlyBalance.getExpense().add(transaction.getAmount());
-            }
-            monthlyBalance.getBalance().add(transaction.getAmount());
-            updatedAccount.getBalance().add(transaction.getAmount());
+            monthlyBalance = getMonthlyBalance(updatedAccount, year, month);
+
+            updateAccountBalance(updatedAccount, transaction.getAmount());
+            updateMonthlyBalance(monthlyBalance, transaction.getAmount());
+            balances.add(monthlyBalance);
         }
-        monthlyBalanceRepository.save(monthlyBalance);
+        monthlyBalanceRepository.save(balances);
         accountRepository.save(updatedAccount);
     }
 
@@ -85,4 +79,23 @@ public class ParserUtilImpl implements ParserUtil {
 
         return result;
     }
+
+    private void updateMonthlyBalance(MonthlyBalance monthlyBalance, BigDecimal amount) {
+        monthlyBalance.setBalance(monthlyBalance.getBalance().add(amount));
+        if (amount.compareTo(BigDecimal.ZERO) > 0) {
+            monthlyBalance.setIncome(monthlyBalance.getIncome().add(amount));
+        } else {
+            monthlyBalance.setExpense(monthlyBalance.getExpense().add(amount));
+        }
+    }
+
+    private void updateAccountBalance(Account account, BigDecimal ammount) {
+        account.setBalance(account.getBalance().add(ammount));
+    }
+
+    private MonthlyBalance getMonthlyBalance(Account updatedAccount, int year, int month) {
+            MonthlyBalance fromDb = monthlyBalanceRepository.findByAccountAndYearAndMonth(updatedAccount, year, month);
+            return fromDb != null ? fromDb : new MonthlyBalance(year, month);
+    }
+
 }

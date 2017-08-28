@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/Observable';
+import { MonthlyBalanceService } from './../service/monthly-balance.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../service/user.service';
@@ -17,7 +19,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
     {data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}
   ];
-  public lineChartLabels:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChartLabels:Array<string> = [];
   public lineChartOptions:any = {
     responsive: true
   };
@@ -31,19 +33,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private userService: UserService, private accountService: AccountService) {}
+  constructor(private userService: UserService,
+    private accountService: AccountService,
+    private balanceService: MonthlyBalanceService) {}
 
   ngOnInit(): void {
     this.subscriptions.push(this.userService.$userObservable.subscribe(
       value => this.user = value
     ));
     this.subscriptions.push(this.accountService.getAccounts().subscribe(
-      value => this.accounts = value
-    ));
-  }
+      value => {
+        this.accounts = value;
+        this.fetchBalance();
+      }));
+    }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  private fetchBalance(): void {
+    let balanceCalls = [];
+    this.accounts.forEach(account => {
+      balanceCalls.push(this.balanceService.getBalance(account));
+    });
+    this.subscriptions.push(Observable.forkJoin(balanceCalls).subscribe(response => {
+      console.log(response);
+    }));
   }
 
 }

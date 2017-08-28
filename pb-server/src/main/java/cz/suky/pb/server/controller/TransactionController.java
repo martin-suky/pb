@@ -6,6 +6,7 @@ import cz.suky.pb.server.domain.Transaction;
 import cz.suky.pb.server.domain.User;
 import cz.suky.pb.server.dto.TransactionSearch;
 import cz.suky.pb.server.dto.UploadResponse;
+import cz.suky.pb.server.exception.ParserException;
 import cz.suky.pb.server.repository.AccountRepository;
 import cz.suky.pb.server.repository.TransactionRepository;
 import cz.suky.pb.server.service.parser.ParserOrchestrator;
@@ -34,9 +35,13 @@ public class TransactionController {
     private ParserOrchestrator parserOrchestrator;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResponseEntity<UploadResponse> upload(User user, @PathVariable Long accountId, @RequestParam MultipartFile file) throws IOException {
+    public ResponseEntity<UploadResponse> upload(User user, @PathVariable Long accountId, @RequestParam MultipartFile file) {
         Account accountByOwnerAndId = accountRepository.findAccountByOwnerAndId(user, accountId);
-        return ResponseEntity.ok(parserOrchestrator.parseAndStore(accountByOwnerAndId, file.getInputStream(), MimeType.TEXT_HTML));
+        try {
+            return ResponseEntity.ok(parserOrchestrator.parseAndStore(accountByOwnerAndId, file.getInputStream(), MimeType.TEXT_HTML));
+        } catch (IOException e) {
+            throw new ParserException("No valid file in data.");
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET)

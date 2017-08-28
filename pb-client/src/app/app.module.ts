@@ -1,3 +1,4 @@
+import { MonthlyBalanceService } from './service/monthly-balance.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -8,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { UserService } from './service/user.service';
 
+import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -77,6 +79,7 @@ import { MonthComponent } from './month/month.component';
   ],
   providers: [
     AccountService,
+    MonthlyBalanceService,
     NotificationService,
     TransactionService,
     UserHttpService,

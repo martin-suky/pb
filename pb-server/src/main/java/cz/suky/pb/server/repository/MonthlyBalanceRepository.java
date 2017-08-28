@@ -13,10 +13,15 @@ package cz.suky.pb.server.repository;
 
 import cz.suky.pb.server.domain.Account;
 import cz.suky.pb.server.domain.MonthlyBalance;
+import org.springframework.cache.annotation.Cacheable;
+
+import java.util.List;
 
 /**
  *
  */
 public interface MonthlyBalanceRepository extends AbstractEntityRepository<MonthlyBalance> {
     MonthlyBalance findByAccountAndYearAndMonth(Account account, int year, int month);
+
+    List<MonthlyBalance> findByAccount(Account accountByOwnerAndId);
 }
