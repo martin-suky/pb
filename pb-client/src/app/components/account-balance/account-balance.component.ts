@@ -10,31 +10,26 @@ import { MonthlyBalance } from '../../dto/monthly-balance';
   templateUrl: './account-balance.component.html',
   styleUrls: ['./account-balance.component.css']
 })
-export class AccountBalanceComponent implements OnInit, OnDestroy, OnChanges {
+export class AccountBalanceComponent implements OnInit, OnDestroy {
 
   @Input()
   public accounts: Account[] = [];
 
-  public chartType = 'chartType';
-  public lineChartData:Array<any> = [];
-  public lineChartLabels:Array<string> = [];
+  public chartType = 'line';
+  public lineChartData:Array<any>;
+  public lineChartLabels:Array<string>;
   public lineChartLegend = true;
   public lineChartOptions:any = {
     responsive: true
   };
 
+  private prepared: boolean = false;
   private subscriptions: Subscription[] = [];
 
   constructor(private balanceService: MonthlyBalanceService) {
   }
 
   ngOnInit() {
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
     if (this.accounts) {
       let balanceCalls = [];
       this.accounts.forEach(account => {
@@ -46,6 +41,10 @@ export class AccountBalanceComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
   private prepareGraphData(allBalances: MonthlyBalance[][]): void {
     let date = new Date();
     let lowestYear: number = date.getFullYear();
@@ -54,6 +53,7 @@ export class AccountBalanceComponent implements OnInit, OnDestroy, OnChanges {
     let highestMonth: number = date.getMonth() + 1;
     let countOfGraphs: number = 0;
     this.lineChartData = [];
+    this.lineChartLabels = [];
 
     for (let accountBalance of allBalances) {
       if (accountBalance.length == 0) {
@@ -70,6 +70,10 @@ export class AccountBalanceComponent implements OnInit, OnDestroy, OnChanges {
         highestYear = accountBalance[accountBalance.length - 1].year;
         highestMonth = accountBalance[accountBalance.length - 1].month;
       }
+    }
+
+    if (countOfGraphs == 0) {
+      return;
     }
 
     let indexYear = lowestYear;
@@ -99,6 +103,7 @@ export class AccountBalanceComponent implements OnInit, OnDestroy, OnChanges {
         indexMonth = 1;
       }
     } while (indexLabel < highestLabel);
+    this.prepared = true;
     console.log(this.lineChartData);
   }
 
