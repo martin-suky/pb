@@ -29,12 +29,7 @@
     </div>
     <div class="column">
       <h2 class="subtitle">Overview</h2>
-      <canvas baseChart width="400" height="400"
-              [datasets]="lineChartData"
-              [labels]="lineChartLabels"
-              [options]="lineChartOptions"
-              [legend]="lineChartLegend"
-              [chartType]="lineChartType"></canvas>
+      <app-account-balance [accounts]="accounts"></app-account-balance>
     </div>
   </div>
 

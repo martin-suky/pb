@@ -33,7 +33,8 @@ public class MonthlyBalance extends AbstractEntity {
     protected MonthlyBalance() {
     }
 
-    public MonthlyBalance(int year, int month) {
+    public MonthlyBalance(Account account, int year, int month) {
+        this.account = account;
         this.year = year;
         this.month = month;
         this.income = BigDecimal.ZERO;

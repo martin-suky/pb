@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Bank } from '../dto/bank';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CreateAccountRequest } from '../dto/create-account-request';
-import { AccountService } from '../service/account.service';
-import { NotificationService } from '../service/notification.service';
+import { Bank } from '../../dto/bank';
+import { AccountService } from '../../service/account.service';
+import { CreateAccountRequest } from '../../dto/create-account-request';
+import { NotificationService } from '../../service/notification.service';
 
 @Component({
   selector: 'app-add-account',
@@ -31,7 +31,7 @@ export class AddAccountComponent implements OnInit {
         bank: this.accountForm.value.bank,
       };
 
-      this.accountService.saveAccount(accountRequest).subscribe(success => {
+      this.accountService.saveAccount(accountRequest).subscribe(() => {
         this.notificationService.displaySuccess('Account created');
         this.accountForm.reset();
       });

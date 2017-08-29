@@ -1,22 +1,21 @@
 import { Month } from './../month/month.component';
-import { TransactionSearch } from './../dto/transaction-search';
-import { TransactionService } from './../service/transaction.service';
-import { Transaction } from './../dto/transaction';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { AccountService } from '../service/account.service';
-import { Account } from '../dto/account';
+import { AccountService } from '../../service/account.service';
+import { TransactionService } from '../../service/transaction.service';
+import { TransactionSearch } from '../../dto/transaction-search';
+import { Account } from '../../dto/account';
 
 @Component({
   selector: 'app-account-detail',
   templateUrl: './account-detail.component.html',
   styleUrls: ['./account-detail.component.css']
 })
-export class AccountDetailComponent implements OnInit {
+export class AccountDetailComponent implements OnInit, OnDestroy {
 
-  public account:Account;
-  public months:Month[] = [];
+  public account: Account;
+  public months: Month[] = [];
   public month: number;
   public year: number;
   public currentMonth: number;
@@ -25,7 +24,8 @@ export class AccountDetailComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private route: ActivatedRoute, private accountService:AccountService, private transactionService: TransactionService) { }
+  constructor(private route: ActivatedRoute, private accountService: AccountService, private transactionService: TransactionService) {
+  }
 
   ngOnInit() {
     let date = new Date();
@@ -43,6 +43,10 @@ export class AccountDetailComponent implements OnInit {
     ));
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
   public back(): void {
     if (this.loading.length > 0) {
       return;
@@ -51,12 +55,12 @@ export class AccountDetailComponent implements OnInit {
     this.months[2] = this.months[1];
     this.months[1] = this.months[0];
     this.months[0] = null;
-    this.month --;
+    this.month--;
     if (this.month < 1) {
       this.month += 12;
       this.year--;
     }
-    this.fetchMonth(0, this.month -2, this.year);
+    this.fetchMonth(0, this.month - 2, this.year);
   }
 
   public forward(): void {
@@ -67,7 +71,7 @@ export class AccountDetailComponent implements OnInit {
     this.months[0] = this.months[1];
     this.months[1] = this.months[2];
     this.months[2] = null;
-    this.month ++;
+    this.month++;
     if (this.month > 12) {
       this.month -= 12;
       this.year++;
@@ -77,8 +81,8 @@ export class AccountDetailComponent implements OnInit {
 
   private fetchInitialTransactions(): void {
     this.loading.push(true, true, true);
-    this.fetchMonth(0, this.month -2, this.year);
-    this.fetchMonth(1, this.month -1, this.year);
+    this.fetchMonth(0, this.month - 2, this.year);
+    this.fetchMonth(1, this.month - 1, this.year);
     this.fetchMonth(2, this.month, this.year);
   }
 

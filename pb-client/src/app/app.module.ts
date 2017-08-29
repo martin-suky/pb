@@ -1,12 +1,12 @@
 import { MonthlyBalanceService } from './service/monthly-balance.service';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
+import { LoginComponent } from './components/login/login.component';
+import { LogoutComponent } from './components/logout/logout.component';
 import { UserService } from './service/user.service';
 
 import 'rxjs/add/observable/forkJoin';
@@ -17,14 +17,15 @@ import { HttpModule } from '@angular/http';
 import { ChartsModule } from 'ng2-charts';
 import { AccountService } from './service/account.service';
 import { UserHttpService } from './service/user-http.service';
-import { AddAccountComponent } from './add-account/add-account.component';
-import { AccountDetailComponent } from './account-detail/account-detail.component';
-import { NotificationComponent } from './notification/notification.component';
+import { AddAccountComponent } from './components/add-account/add-account.component';
+import { AccountDetailComponent } from './components/account-detail/account-detail.component';
+import { NotificationComponent } from './components/notification/notification.component';
 import { NotificationService } from './service/notification.service';
-import { TitleComponent } from './title/title.component';
-import { UploadComponent } from './upload/upload.component';
+import { TitleComponent } from './components/title/title.component';
+import { UploadComponent } from './components/upload/upload.component';
 import { TransactionService } from './service/transaction.service';
-import { MonthComponent } from './month/month.component';
+import { MonthComponent } from './components/month/month.component';
+import { AccountBalanceComponent } from './components/account-balance/account-balance.component';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { MonthComponent } from './month/month.component';
     TitleComponent,
     UploadComponent,
     MonthComponent,
+    AccountBalanceComponent,
   ],
   providers: [
     AccountService,

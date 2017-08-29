@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AccountService } from '../service/account.service';
+import { AccountService } from '../../service/account.service';
 import { Subscription } from 'rxjs/Subscription';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Account } from '../dto/account';
-import { TransactionService } from '../service/transaction.service';
-import { UploadResponse } from '../dto/upload-response';
+import { Account } from '../../dto/account';
+import { TransactionService } from '../../service/transaction.service';
+import { UploadResponse } from '../../dto/upload-response';
 
 @Component({
   selector: 'app-upload',

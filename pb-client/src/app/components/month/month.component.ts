@@ -1,5 +1,5 @@
-import { Transaction } from './../dto/transaction';
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Transaction } from '../../dto/transaction';
 
 @Component({
   selector: 'app-month',

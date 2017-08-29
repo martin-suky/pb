@@ -1,8 +1,8 @@
-import { NotificationService } from './../service/notification.service';
+import { NotificationService } from '../../service/notification.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../service/user.service';
+import { UserService } from '../../service/user.service';
 import { Router } from '@angular/router';
 
 @Component({

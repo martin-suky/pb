@@ -30,7 +30,6 @@ public class ParserUtilImpl implements ParserUtil {
         MonthlyBalance monthlyBalance = null;
         Account updatedAccount = accountRepository.getOne(account.getId());
         transactions.sort(Comparator.comparing(Transaction::getDate));
-        Set<MonthlyBalance> balances = new HashSet<>();
         for (Transaction transaction : transactions) {
             int year = transaction.getDate().getYear();
             int month = transaction.getDate().getMonthValue();
@@ -38,10 +37,7 @@ public class ParserUtilImpl implements ParserUtil {
 
             updateAccountBalance(updatedAccount, transaction.getAmount());
             updateMonthlyBalance(monthlyBalance, transaction.getAmount());
-            balances.add(monthlyBalance);
         }
-        monthlyBalanceRepository.save(balances);
-        accountRepository.save(updatedAccount);
     }
 
     @Override
@@ -94,8 +90,11 @@ public class ParserUtilImpl implements ParserUtil {
     }
 
     private MonthlyBalance getMonthlyBalance(Account updatedAccount, int year, int month) {
-            MonthlyBalance fromDb = monthlyBalanceRepository.findByAccountAndYearAndMonth(updatedAccount, year, month);
-            return fromDb != null ? fromDb : new MonthlyBalance(year, month);
+            MonthlyBalance balance = monthlyBalanceRepository.findByAccountAndYearAndMonth(updatedAccount, year, month);
+            if (balance == null) {
+                balance = monthlyBalanceRepository.save(new MonthlyBalance(updatedAccount, year, month));
+            }
+            return balance;
     }
 
 }
