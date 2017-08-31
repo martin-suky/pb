@@ -20,7 +20,13 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
   public lineChartLabels:Array<string>;
   public lineChartLegend = true;
   public lineChartOptions:any = {
-    responsive: true
+    responsive: true,
+    scales: {
+      yAxes: [{
+        id: 'default',
+        type: 'linear'
+      }]
+    }
   };
 
   private prepared: boolean = false;
@@ -60,7 +66,7 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
         continue;
       } else {
         countOfGraphs ++;
-        this.lineChartData.push({data: [], label: accountBalance[0].account.name});
+        this.lineChartData.push({data: [], label: accountBalance[0].account.name, yAxisID: 'default'});
       }
       if (`${lowestYear}-${lowestMonth}` > `${accountBalance[0].year}-${accountBalance[0].month}`) {
         lowestYear = accountBalance[0].year;
@@ -82,21 +88,23 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
     let indexLabel: string;
     let iteration: number = 0;
     do {
-      if (iteration == countOfGraphs) {
-        iteration = 0;
-      }
       indexLabel = `${indexYear}-${indexMonth}`;
       this.lineChartLabels.push(indexLabel);
       for (let accountBalance of allBalances) {
+        if (iteration == countOfGraphs) {
+          iteration = 0;
+        }
         let balance = accountBalance.length > 0 ? accountBalance[0]: null;
         if (balance && balance.year == indexYear && balance.month == indexMonth) {
-          this.lineChartData[iteration].data.push(balance.balance);
+
+          let acumulatedBalance = this.getAcumulatedBalance(this.lineChartData[iteration].data, balance.balance);
+          this.lineChartData[iteration].data.push(acumulatedBalance);
           accountBalance.shift();
         } else {
-          this.lineChartData[iteration].data.push(0);
+          this.lineChartData[iteration].data.push(this.getAcumulatedBalance(this.lineChartData[iteration].data, 0));
         }
+        iteration ++;
       }
-      iteration ++;
       indexMonth++;
       if (indexMonth == 13) {
         indexYear ++;
@@ -108,5 +116,11 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
   }
 
 
-
+  private getAcumulatedBalance(data: any[], balance: number): number {
+    if (data.length > 0) {
+      return data[data.length - 1] + balance;
+    } else {
+      return balance;
+    }
+  }
 }

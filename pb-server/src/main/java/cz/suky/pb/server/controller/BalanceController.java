@@ -27,6 +27,6 @@ public class BalanceController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<MonthlyBalance>> getAll(User user, @PathVariable Long accountId) {
         Account accountByOwnerAndId = accountRepository.findAccountByOwnerAndId(user, accountId);
-        return ResponseEntity.ok(monthlyBalanceRepository.findByAccount(accountByOwnerAndId));
+        return ResponseEntity.ok(monthlyBalanceRepository.findByAccountOrderByYearAscMonthAsc(accountByOwnerAndId));
     }
 }

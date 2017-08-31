@@ -23,5 +23,5 @@ import java.util.List;
 public interface MonthlyBalanceRepository extends AbstractEntityRepository<MonthlyBalance> {
     MonthlyBalance findByAccountAndYearAndMonth(Account account, int year, int month);
 
-    List<MonthlyBalance> findByAccount(Account accountByOwnerAndId);
+    List<MonthlyBalance> findByAccountOrderByYearAscMonthAsc(Account accountByOwnerAndId);
 }

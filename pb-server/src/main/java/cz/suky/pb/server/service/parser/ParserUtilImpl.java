@@ -60,9 +60,12 @@ public class ParserUtilImpl implements ParserUtil {
 
         while (iteratorNew < countOfNew) {
             Transaction newT = transactions.get(iteratorNew);
-            Transaction existingT = existing.get(iteratorExisting);
+            Transaction existingT = iteratorExisting < existing.size() ? existing.get(iteratorExisting) : null;
 
-            if (newT.equals(existingT)) {
+            if (existingT == null) {
+                result.add(newT);
+                iteratorNew ++;
+            } else if (newT.equals(existingT)) {
                 iteratorNew++;
                 iteratorExisting++;
             } else if (newT.hashCode() <= existingT.hashCode()) {
