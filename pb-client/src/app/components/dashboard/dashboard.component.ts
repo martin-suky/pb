@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.accountService.getAccounts().subscribe(
       value => {
         this.accounts = value;
+        this.accounts.forEach(account => this.totalCash += account.balance);
       }));
     }
 

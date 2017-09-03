@@ -8,7 +8,8 @@ import java.util.List;
  * Created by none_ on 06-Nov-16.
  */
 public enum Bank {
-    MBANK("mBank", Arrays.asList(new File(MimeType.TEXT_HTML, Charset.UTF8)));
+    MBANK("mBank", Arrays.asList(new File(MimeType.TEXT_HTML, Charset.UTF8))),
+    ING("ING", Arrays.asList(new File(MimeType.TEXT_HTML, Charset.UTF8)));
 
     private String name;
     private List<File> inputs;

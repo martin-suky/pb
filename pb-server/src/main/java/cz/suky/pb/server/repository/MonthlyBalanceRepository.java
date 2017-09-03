@@ -14,6 +14,8 @@ package cz.suky.pb.server.repository;
 import cz.suky.pb.server.domain.Account;
 import cz.suky.pb.server.domain.MonthlyBalance;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -24,4 +26,7 @@ public interface MonthlyBalanceRepository extends AbstractEntityRepository<Month
     MonthlyBalance findByAccountAndYearAndMonth(Account account, int year, int month);
 
     List<MonthlyBalance> findByAccountOrderByYearAscMonthAsc(Account accountByOwnerAndId);
+
+    @Query("SELECT b FROM MonthlyBalance b WHERE b.account = :#{#lowest.account} AND (b.year > :#{#lowest.year} OR (b.year = :#{#lowest.year} AND b.month >= :#{#lowest.month})) ORDER BY b.year, b.month")
+    List<MonthlyBalance> findThisAndNewerBalances(@Param("lowest") MonthlyBalance lowestBalance);
 }

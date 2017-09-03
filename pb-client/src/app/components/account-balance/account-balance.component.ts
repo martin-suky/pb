@@ -96,12 +96,10 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
         }
         let balance = accountBalance.length > 0 ? accountBalance[0]: null;
         if (balance && balance.year == indexYear && balance.month == indexMonth) {
-
-          let acumulatedBalance = this.getAcumulatedBalance(this.lineChartData[iteration].data, balance.balance);
-          this.lineChartData[iteration].data.push(acumulatedBalance);
+          this.lineChartData[iteration].data.push(balance.accumulatedBalance);
           accountBalance.shift();
         } else {
-          this.lineChartData[iteration].data.push(this.getAcumulatedBalance(this.lineChartData[iteration].data, 0));
+          this.lineChartData[iteration].data.push(this.getLastBalance(this.lineChartData[iteration].data));
         }
         iteration ++;
       }
@@ -112,15 +110,14 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
       }
     } while (indexLabel < highestLabel);
     this.prepared = true;
-    console.log(this.lineChartData);
   }
 
 
-  private getAcumulatedBalance(data: any[], balance: number): number {
+  private getLastBalance(data: any[]): number {
     if (data.length > 0) {
-      return data[data.length - 1] + balance;
+      return data[data.length - 1];
     } else {
-      return balance;
+      return 0;
     }
   }
 }

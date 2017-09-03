@@ -25,6 +25,7 @@ public class MonthlyBalance extends AbstractEntity {
     private BigDecimal income;
     private BigDecimal expense;
     private BigDecimal balance;
+    private BigDecimal accumulatedBalance;
     private int year;
     private int month;
     @ManyToOne
@@ -40,6 +41,7 @@ public class MonthlyBalance extends AbstractEntity {
         this.income = BigDecimal.ZERO;
         this.expense = BigDecimal.ZERO;
         this.balance = BigDecimal.ZERO;
+        this.accumulatedBalance = BigDecimal.ZERO;
     }
 
     public BigDecimal getIncome() {
@@ -64,6 +66,14 @@ public class MonthlyBalance extends AbstractEntity {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    public BigDecimal getAccumulatedBalance() {
+        return accumulatedBalance;
+    }
+
+    public void setAccumulatedBalance(BigDecimal accumulatedBalance) {
+        this.accumulatedBalance = accumulatedBalance;
     }
 
     public int getYear() {

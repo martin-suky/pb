@@ -13,7 +13,7 @@ import { NotificationService } from '../../service/notification.service';
 export class AddAccountComponent implements OnInit {
 
   accountForm: FormGroup;
-  public banks:Bank[] = [Bank.MBANK];
+  public banks:Bank[] = [Bank.MBANK, Bank.ING];
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private notificationService: NotificationService) { }
 

@@ -3,6 +3,7 @@ package cz.suky.pb.server.service.parser;
 import cz.suky.pb.server.domain.Account;
 import cz.suky.pb.server.domain.MonthlyBalance;
 import cz.suky.pb.server.domain.Transaction;
+import cz.suky.pb.server.exception.ParserException;
 import cz.suky.pb.server.repository.AccountRepository;
 import cz.suky.pb.server.repository.MonthlyBalanceRepository;
 import cz.suky.pb.server.repository.TransactionRepository;
@@ -10,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.*;
-import java.util.function.Function;
 
 @Service
 public class ParserUtilImpl implements ParserUtil {
@@ -25,18 +27,55 @@ public class ParserUtilImpl implements ParserUtil {
     @Autowired
     private MonthlyBalanceRepository monthlyBalanceRepository;
 
+    private DecimalFormat decimalFormat = new DecimalFormat();
+
+    @Override
+    public BigDecimal parseAmount(String text) {
+        String replace = text.replaceAll("[^0-9-,]", "").replace(',', '.');
+        decimalFormat.setParseBigDecimal(true);
+        try {
+            return (BigDecimal) decimalFormat.parse(replace);
+        } catch (ParseException e) {
+            throw new ParserException("parser failed: cannot parse amount.");
+        }
+    }
+
     @Override
     public void updateAccountBalance(Account account, List<Transaction> transactions) {
         MonthlyBalance monthlyBalance = null;
+        MonthlyBalance lowestBalance = null;
+        BigDecimal originalBalance = BigDecimal.ZERO;
         Account updatedAccount = accountRepository.getOne(account.getId());
         transactions.sort(Comparator.comparing(Transaction::getDate));
         for (Transaction transaction : transactions) {
             int year = transaction.getDate().getYear();
             int month = transaction.getDate().getMonthValue();
             monthlyBalance = getMonthlyBalance(updatedAccount, year, month);
+            if (lowestBalance == null ||
+                    (monthlyBalance.getYear() < lowestBalance.getYear() ||
+                            (monthlyBalance.getYear() == lowestBalance.getYear() && monthlyBalance.getMonth() < lowestBalance.getMonth()))) {
+                lowestBalance = monthlyBalance;
+                originalBalance = lowestBalance.getBalance();
+            }
 
             updateAccountBalance(updatedAccount, transaction.getAmount());
             updateMonthlyBalance(monthlyBalance, transaction.getAmount());
+        }
+
+        updateAcumulatedBalance(lowestBalance, originalBalance);
+    }
+
+    private void updateAcumulatedBalance(MonthlyBalance lowestBalance, BigDecimal originalBalance) {
+        List<MonthlyBalance> balances = monthlyBalanceRepository.findThisAndNewerBalances(lowestBalance);
+        BigDecimal accumulatedBalance = BigDecimal.ZERO;
+        for (MonthlyBalance balance : balances) {
+            if (balance.getId().equals(lowestBalance.getId())) {
+                BigDecimal diff = balance.getBalance().subtract(originalBalance);
+                balance.setAccumulatedBalance(balance.getAccumulatedBalance().add(diff));
+            } else {
+                balance.setAccumulatedBalance(accumulatedBalance.add(balance.getBalance()));
+            }
+            accumulatedBalance = balance.getAccumulatedBalance();
         }
     }
 
