@@ -3,6 +3,7 @@ package cz.suky.pb.server.util;
 import cz.suky.pb.server.domain.User;
 import cz.suky.pb.server.exception.UserException;
 import cz.suky.pb.server.repository.UserRepository;
+import cz.suky.pb.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -25,12 +26,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     private static final Pattern BASIC_AUTHORIZATION = Pattern.compile("Basic (.+)");
     private static final Base64.Decoder DECODER = Base64.getDecoder();
 
-    private UserRepository userRepository;
-
     @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserService userService;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -57,7 +54,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             ex();
         }
 
-        final User user = userRepository.findByUsernameAndPassword(split[0], split[1]);
+        final User user = userService.getUser(split[0], split[1]);
 
         if (user == null) {
             ex();

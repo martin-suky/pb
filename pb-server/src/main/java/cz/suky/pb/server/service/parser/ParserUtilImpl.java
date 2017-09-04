@@ -42,7 +42,7 @@ public class ParserUtilImpl implements ParserUtil {
 
     @Override
     public void updateAccountBalance(Account account, List<Transaction> transactions) {
-        MonthlyBalance monthlyBalance = null;
+        MonthlyBalance monthlyBalance;
         MonthlyBalance lowestBalance = null;
         BigDecimal originalBalance = BigDecimal.ZERO;
         Account updatedAccount = accountRepository.getOne(account.getId());
@@ -62,10 +62,10 @@ public class ParserUtilImpl implements ParserUtil {
             updateMonthlyBalance(monthlyBalance, transaction.getAmount());
         }
 
-        updateAcumulatedBalance(lowestBalance, originalBalance);
+        updateAccumulatedBalance(lowestBalance, originalBalance);
     }
 
-    private void updateAcumulatedBalance(MonthlyBalance lowestBalance, BigDecimal originalBalance) {
+    private void updateAccumulatedBalance(MonthlyBalance lowestBalance, BigDecimal originalBalance) {
         List<MonthlyBalance> balances = monthlyBalanceRepository.findThisAndNewerBalances(lowestBalance);
         BigDecimal accumulatedBalance = BigDecimal.ZERO;
         for (MonthlyBalance balance : balances) {
