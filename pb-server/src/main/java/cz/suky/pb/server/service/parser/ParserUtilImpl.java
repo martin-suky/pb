@@ -131,12 +131,9 @@ public class ParserUtilImpl implements ParserUtil {
         account.setBalance(account.getBalance().add(ammount));
     }
 
-    private MonthlyBalance getMonthlyBalance(Account updatedAccount, int year, int month) {
-            MonthlyBalance balance = monthlyBalanceRepository.findByAccountAndYearAndMonth(updatedAccount, year, month);
-            if (balance == null) {
-                balance = monthlyBalanceRepository.save(new MonthlyBalance(updatedAccount, year, month));
-            }
-            return balance;
+    private MonthlyBalance getMonthlyBalance(final Account updatedAccount, final int year, final int month) {
+        Optional<MonthlyBalance> balance = monthlyBalanceRepository.findByAccountAndYearAndMonth(updatedAccount, year, month);
+        return balance.orElseGet(() -> monthlyBalanceRepository.save(new MonthlyBalance(updatedAccount, year, month)));
     }
 
 }
