@@ -14,6 +14,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Base64;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,12 +37,9 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String header = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header == null) {
-            ex();
-        }
+        Optional<String> header = Optional.ofNullable(webRequest.getHeader(HttpHeaders.AUTHORIZATION));
 
-        Matcher matcher = BASIC_AUTHORIZATION.matcher(header);
+        Matcher matcher = BASIC_AUTHORIZATION.matcher(header.orElseThrow(UserException::notAuthorized));
         if (!matcher.matches()) {
             ex();
         }
@@ -54,16 +52,12 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             ex();
         }
 
-        final User user = userService.getUser(split[0], split[1]);
+        Optional<User> user = userService.getUser(split[0], split[1]);
 
-        if (user == null) {
-            ex();
-        }
-
-        return user;
+        return user.orElseThrow(UserException::notAuthorized);
     }
 
-    private void ex() {
+    private static void ex() {
         throw UserException.notAuthorized();
     }
 }

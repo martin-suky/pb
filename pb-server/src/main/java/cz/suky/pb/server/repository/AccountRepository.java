@@ -5,6 +5,7 @@ import cz.suky.pb.server.domain.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by none_ on 16-Jul-17.
@@ -13,5 +14,5 @@ import java.util.List;
 public interface AccountRepository extends AbstractEntityRepository<Account> {
     List<Account> findAccountsByOwner(User owner);
 
-    Account findAccountByOwnerAndId(User user, Long id);
+    Optional<Account> findAccountByOwnerAndId(User user, Long id);
 }

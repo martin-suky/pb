@@ -13,6 +13,8 @@ package cz.suky.pb.server.service;
 
 import cz.suky.pb.server.domain.User;
 
+import java.util.Optional;
+
 /**
  *
  */
@@ -20,5 +22,5 @@ public interface UserService {
 
     User registerUser(String username, String plainPassword);
 
-    User getUser(String username, String plainPassword);
+    Optional<User> getUser(String username, String plainPassword);
 }

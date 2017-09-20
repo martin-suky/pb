@@ -2,12 +2,14 @@ package cz.suky.pb.server.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 public class User extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
+    @Column(unique = true)
     private String username;
 
     @JsonIgnore

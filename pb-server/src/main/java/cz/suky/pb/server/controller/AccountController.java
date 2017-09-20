@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Account controller
@@ -29,11 +30,8 @@ public class AccountController {
 
     @RequestMapping(value = "/{accountId}", method = RequestMethod.GET)
     public ResponseEntity<Account> getAccount(User user, @PathVariable Long accountId) {
-        Account account = accountRepository.findAccountByOwnerAndId(user, accountId);
-        if (null == account) {
-            throw AccountException.notFound();
-        }
-        return ResponseEntity.ok(account);
+        Optional<Account> account = accountRepository.findAccountByOwnerAndId(user, accountId);
+        return ResponseEntity.ok(account.orElseThrow(AccountException::notFound));
     }
 
     @RequestMapping(method = RequestMethod.POST)
