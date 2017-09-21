@@ -15,10 +15,12 @@ import cz.suky.pb.server.domain.ConfigKey;
 import cz.suky.pb.server.domain.Configuration;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  *
  */
 @Repository
 public interface ConfigurationRepository extends AbstractEntityRepository<Configuration> {
-    Configuration findByKey(ConfigKey configKey);
+    Optional<Configuration> findByKey(ConfigKey configKey);
 }

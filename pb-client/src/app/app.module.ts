@@ -26,6 +26,7 @@ import { UploadComponent } from './components/upload/upload.component';
 import { TransactionService } from './service/transaction.service';
 import { MonthComponent } from './components/month/month.component';
 import { AccountBalanceComponent } from './components/account-balance/account-balance.component';
+import { TotalBalanceComponent } from './components/total-balance/total-balance.component';
 
 @NgModule({
   imports: [
@@ -78,6 +79,7 @@ import { AccountBalanceComponent } from './components/account-balance/account-ba
     UploadComponent,
     MonthComponent,
     AccountBalanceComponent,
+    TotalBalanceComponent,
   ],
   providers: [
     AccountService,

@@ -26,11 +26,9 @@ public class AppInitHook implements ApplicationListener<ApplicationReadyEvent> {
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        Configuration initialized = configurationRepository.findByKey(ConfigKey.APP_INITIALIZED);
-        if (initialized == null) {
-            initialized = new Configuration(ConfigKey.APP_INITIALIZED);
+        Configuration initialized = configurationRepository.findByKey(ConfigKey.APP_INITIALIZED)
+                .orElse(new Configuration(ConfigKey.APP_INITIALIZED));
 
-        }
         if (initialized.getValueAsBoolean() == false) {
             userService.registerUser("none_", "Password1");
             initialized.setValueAsBoolean(true);
