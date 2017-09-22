@@ -1,7 +1,7 @@
 import { Account } from './../../dto/account';
 import { MonthlyBalance } from './../../dto/monthly-balance';
 import { Observable } from 'rxjs/Observable';
-import { MonthlyBalanceService } from '../../service/monthly-balance.service';
+import { MonthlyBalanceHttpService } from '../../service/monthly-balance-http.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -31,7 +31,7 @@ export class TotalBalanceComponent implements OnInit {
   private prepared: boolean = false;
   private subscriptions: Subscription[] = [];
 
-  constructor(private balanceService: MonthlyBalanceService) { }
+  constructor(private balanceService: MonthlyBalanceHttpService) { }
 
   ngOnInit() {
     if (this.accounts) {

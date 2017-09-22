@@ -29,7 +29,7 @@
     </div>
     <div class="column">
       <h2 class="subtitle">Overview</h2>
-      <app-account-balance *ngIf="accounts" [accounts]="accounts"></app-account-balance>
+      <app-account-balance *ngIf="accounts && accounts.length > 0" [accounts]="accounts"></app-account-balance>
     </div>
   </div>
 

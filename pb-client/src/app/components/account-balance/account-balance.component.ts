@@ -1,9 +1,9 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Account } from '../../dto/account';
 import { Observable } from 'rxjs/Observable';
-import { MonthlyBalanceService } from '../../service/monthly-balance.service';
 import { MonthlyBalance } from '../../dto/monthly-balance';
+import { BalanceData, MonthlyBalanceService } from '../../service/monthly-balance.service';
 
 @Component({
   selector: 'app-account-balance',
@@ -15,11 +15,12 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
   @Input()
   public accounts: Account[] = [];
 
-  public chartType = 'line';
-  public lineChartData:Array<any>;
-  public lineChartLabels:Array<string>;
-  public lineChartLegend = true;
-  public lineChartOptions:any = {
+  private accountIds: number[] = [];
+  private chartType = 'line';
+  private lineChartData:Array<any>;
+  private lineChartLabels:Array<string>;
+  private lineChartLegend = true;
+  private lineChartOptions:any = {
     responsive: true,
     scales: {
       yAxes: [{
@@ -37,13 +38,10 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.accounts) {
-      let balanceCalls = [];
-      this.accounts.forEach(account => {
-        balanceCalls.push(this.balanceService.getBalance(account));
-      });
-      this.subscriptions.push(Observable.forkJoin(balanceCalls).subscribe(response => {
-        this.prepareGraphData(response as MonthlyBalance[][]);
-      }));
+      this.accountIds = this.accounts.map(a => a.id);
+      this.subscriptions.push(this.balanceService.balances.subscribe(
+        data => this.prepareGraphData(data)
+      ));
     }
   }
 
@@ -51,35 +49,42 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
-  private prepareGraphData(allBalances: MonthlyBalance[][]): void {
+  private prepareGraphData(data: Map<number, BalanceData>): void {
     let date = new Date();
     let lowestYear: number = date.getFullYear();
     let lowestMonth: number = date.getMonth() + 1;
     let highestYear: number = date.getFullYear();
     let highestMonth: number = date.getMonth() + 1;
     let countOfGraphs: number = 0;
+    let displayedBalanceData: BalanceData[] = [];
     this.lineChartData = [];
     this.lineChartLabels = [];
 
-    for (let accountBalance of allBalances) {
-      if (accountBalance.length == 0) {
-        continue;
-      } else {
-        countOfGraphs ++;
-        this.lineChartData.push({data: [], label: accountBalance[0].account.name, yAxisID: 'default'});
+    data.forEach(balance => {
+      if (this.accountIds.indexOf(balance.account.id) > -1) {
+        displayedBalanceData.push(balance.clone());
+        countOfGraphs++;
       }
-      if (`${lowestYear}-${lowestMonth}` > `${accountBalance[0].year}-${accountBalance[0].month}`) {
-        lowestYear = accountBalance[0].year;
-        lowestMonth = accountBalance[0].month;
-      }
-      if (`${highestYear}-${highestMonth}` < `${accountBalance[accountBalance.length - 1].year}-${accountBalance[accountBalance.length - 1].month}`) {
-        highestYear = accountBalance[accountBalance.length - 1].year;
-        highestMonth = accountBalance[accountBalance.length - 1].month;
-      }
-    }
+    });
 
     if (countOfGraphs == 0) {
       return;
+    }
+
+    for (let accountBalance of displayedBalanceData) {
+      this.lineChartData.push({data: [], label: accountBalance.account.name, yAxisID: 'default'});
+      if (accountBalance.balances.length > 0) {
+        const accountLowest = `${accountBalance.balances[0].year}-${accountBalance.balances[0].month}`;
+        const accountHighest = `${accountBalance.balances[accountBalance.balances.length - 1].year}-${accountBalance.balances[accountBalance.balances.length - 1].month}`;
+        if (`${lowestYear}-${lowestMonth}` > accountLowest) {
+          lowestYear = accountBalance.balances[0].year;
+          lowestMonth = accountBalance.balances[0].month;
+        }
+        if (`${highestYear}-${highestMonth}` < accountHighest) {
+          highestYear = accountBalance.balances[accountBalance.balances.length - 1].year;
+          highestMonth = accountBalance.balances[accountBalance.balances.length - 1].month;
+        }
+      }
     }
 
     let indexYear = lowestYear;
@@ -90,14 +95,14 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
     do {
       indexLabel = `${indexYear}-${indexMonth}`;
       this.lineChartLabels.push(indexLabel);
-      for (let accountBalance of allBalances) {
+      for (let accountBalance of displayedBalanceData) {
         if (iteration == countOfGraphs) {
           iteration = 0;
         }
-        let balance = accountBalance.length > 0 ? accountBalance[0]: null;
+        let balance = accountBalance.balances.length > 0 ? accountBalance.balances[0]: null;
         if (balance && balance.year == indexYear && balance.month == indexMonth) {
           this.lineChartData[iteration].data.push(balance.accumulatedBalance);
-          accountBalance.shift();
+          accountBalance.balances.shift();
         } else {
           this.lineChartData[iteration].data.push(this.getLastBalance(this.lineChartData[iteration].data));
         }

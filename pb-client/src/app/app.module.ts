@@ -1,4 +1,4 @@
-import { MonthlyBalanceService } from './service/monthly-balance.service';
+import { MonthlyBalanceHttpService } from './service/monthly-balance-http.service';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -29,6 +29,7 @@ import { MonthComponent } from './components/month/month.component';
 import { AccountBalanceComponent } from './components/account-balance/account-balance.component';
 import { TotalBalanceComponent } from './components/total-balance/total-balance.component';
 import { AccountService } from './service/account.service';
+import { MonthlyBalanceService } from './service/monthly-balance.service';
 
 @NgModule({
   imports: [
@@ -87,6 +88,7 @@ import { AccountService } from './service/account.service';
     AccountService,
     AccountHttpService,
     MonthlyBalanceService,
+    MonthlyBalanceHttpService,
     NotificationService,
     TransactionService,
     UserHttpService,
