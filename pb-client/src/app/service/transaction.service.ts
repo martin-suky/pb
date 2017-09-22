@@ -1,6 +1,6 @@
-import { Transaction } from './../dto/transaction';
-import { TransactionSearch } from './../dto/transaction-search';
-import { Account } from './../dto/account';
+import { Transaction } from '../dto/transaction';
+import { TransactionSearch } from '../dto/transaction-search';
+import { Account } from '../dto/account';
 import { Injectable } from '@angular/core';
 import { UserHttpService } from './user-http.service';
 import { Observable } from 'rxjs/Observable';

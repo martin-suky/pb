@@ -1,7 +1,7 @@
 import { Account } from './../../dto/account';
 import { MonthlyBalance } from './../../dto/monthly-balance';
 import { Observable } from 'rxjs/Observable';
-import { MonthlyBalanceService } from './../../service/monthly-balance.service';
+import { MonthlyBalanceService } from '../../service/monthly-balance.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, OnInit, Input } from '@angular/core';
 

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Bank } from '../../dto/bank';
-import { AccountService } from '../../service/account.service';
 import { CreateAccountRequest } from '../../dto/create-account-request';
 import { NotificationService } from '../../service/notification.service';
+import { AccountService } from '../../service/account.service';
 
 @Component({
   selector: 'app-add-account',

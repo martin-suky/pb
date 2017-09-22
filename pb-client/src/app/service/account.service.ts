@@ -1,33 +1,33 @@
-import { Account } from './../dto/account';
 import { Injectable } from '@angular/core';
+import { AccountHttpService } from './account-http.service';
+import { Account } from '../dto/account';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { UserHttpService } from './user-http.service';
 import { CreateAccountRequest } from '../dto/create-account-request';
-import { Store } from '@ngrx/store';
-import { AppState } from '../reducer/reducers';
-import { AccountAction } from '../reducer/account.reducer';
-
 
 @Injectable()
 export class AccountService {
 
-  constructor(private http: UserHttpService, private store: Store<AppState>) { }
+  private accountsSubject: BehaviorSubject<Account[]> = new BehaviorSubject([]);
 
-  public getAccounts(): void {
-    this.http.get('/api/account').subscribe(
-      accounts => this.store.dispatch({type: AccountAction.SET_ACCOUNTS, payload: accounts})
+  public accounts: Observable<Account[]> = this.accountsSubject.asObservable();
+
+  constructor(private accountHttpService: AccountHttpService) {
+    this.accountHttpService.getAccounts().subscribe(
+      accounts => this.accountsSubject.next(accounts)
     );
   }
 
   public saveAccount(accountRequest: CreateAccountRequest): Observable<Account> {
-    let observable: Observable<Account> = this.http.post('/api/account', accountRequest);
-    return observable.map(value => {
-      this.getAccounts();
-      return value;
-    });
-  }
+    let observable = this.accountHttpService.saveAccount(accountRequest).publishLast().refCount();
 
-  getAccount(id: number): Observable<Account> {
-    return this.http.get(`/api/account/${id}`);
+    observable.subscribe(
+    account => {
+      const value = this.accountsSubject.getValue();
+      value.push(account);
+      this.accountsSubject.next(value);
+      }
+    );
+    return observable;
   }
 }

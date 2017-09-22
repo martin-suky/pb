@@ -12,10 +12,11 @@ import { UserService } from './service/user.service';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/publishLast';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ChartsModule } from 'ng2-charts';
-import { AccountService } from './service/account.service';
+import { AccountHttpService } from './service/account-http.service';
 import { UserHttpService } from './service/user-http.service';
 import { AddAccountComponent } from './components/add-account/add-account.component';
 import { AccountDetailComponent } from './components/account-detail/account-detail.component';
@@ -27,9 +28,7 @@ import { TransactionService } from './service/transaction.service';
 import { MonthComponent } from './components/month/month.component';
 import { AccountBalanceComponent } from './components/account-balance/account-balance.component';
 import { TotalBalanceComponent } from './components/total-balance/total-balance.component';
-import { StoreModule } from '@ngrx/store';
-import { AppReducers } from './reducer/reducers';
-import { accountReducer } from './reducer/account.reducer';
+import { AccountService } from './service/account.service';
 
 @NgModule({
   imports: [
@@ -69,9 +68,6 @@ import { accountReducer } from './reducer/account.reducer';
         pathMatch: 'full'
       }
     ]),
-    StoreModule.provideStore({
-      [AppReducers.ACCOUNTS]: accountReducer,
-    })
   ],
   declarations: [
     AppComponent,
@@ -89,6 +85,7 @@ import { accountReducer } from './reducer/account.reducer';
   ],
   providers: [
     AccountService,
+    AccountHttpService,
     MonthlyBalanceService,
     NotificationService,
     TransactionService,

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AccountService } from '../../service/account.service';
+import { AccountHttpService } from '../../service/account-http.service';
 import { Subscription } from 'rxjs/Subscription';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Account } from '../../dto/account';
@@ -25,7 +25,7 @@ export class UploadComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private accountService: AccountService, private transactionService: TransactionService) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private accountService: AccountHttpService, private transactionService: TransactionService) {
   }
 
   ngOnInit(): void {
