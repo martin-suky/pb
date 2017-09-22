@@ -37,10 +37,17 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.accounts) {
+    if (this.accounts && this.accounts.length > 0) {
       this.accountIds = this.accounts.map(a => a.id);
       this.subscriptions.push(this.balanceService.balances.subscribe(
         data => this.prepareGraphData(data)
+      ));
+    } else {
+      this.accountIds = [0];
+      this.subscriptions.push(this.balanceService.totalBalance.subscribe(
+        data => {
+          this.prepareGraphData(new Map().set(0, data));
+        }
       ));
     }
   }
