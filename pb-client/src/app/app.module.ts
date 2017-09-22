@@ -27,6 +27,9 @@ import { TransactionService } from './service/transaction.service';
 import { MonthComponent } from './components/month/month.component';
 import { AccountBalanceComponent } from './components/account-balance/account-balance.component';
 import { TotalBalanceComponent } from './components/total-balance/total-balance.component';
+import { StoreModule } from '@ngrx/store';
+import { AppReducers } from './reducer/reducers';
+import { accountReducer } from './reducer/account.reducer';
 
 @NgModule({
   imports: [
@@ -65,7 +68,10 @@ import { TotalBalanceComponent } from './components/total-balance/total-balance.
         redirectTo: '/dashboard',
         pathMatch: 'full'
       }
-    ])
+    ]),
+    StoreModule.provideStore({
+      [AppReducers.ACCOUNTS]: accountReducer,
+    })
   ],
   declarations: [
     AppComponent,

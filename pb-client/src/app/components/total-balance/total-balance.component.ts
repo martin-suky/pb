@@ -40,7 +40,7 @@ export class TotalBalanceComponent implements OnInit {
         balanceCalls.push(this.balanceService.getBalance(account));
       });
       this.subscriptions.push(Observable.forkJoin(balanceCalls).subscribe(response => {
-        this.prepareGraphData(response as MonthlyBalance[][]);
+        // this.prepareGraphData(response as MonthlyBalance[][]);
       }));
     }
   }
