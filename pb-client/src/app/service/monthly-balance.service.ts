@@ -67,7 +67,7 @@ export class MonthlyBalanceService {
     map.forEach(value => {
       accounts.push(value.clone());
       if (value.balances && value.balances.length > 0
-         && (lowestYear > value.balances[0].year 
+         && (lowestYear > value.balances[0].year
           || (lowestYear == value.balances[0].year
              && lowestMonth > value.balances[0].month))) {
         lowestMonth = value.balances[0].month;
@@ -86,18 +86,18 @@ export class MonthlyBalanceService {
       balance.year = lowestYear;
       balance.month = lowestMonth;
       balance.accumulatedBalance = previousBalance.accumulatedBalance;
-      
+
       accounts.forEach(value => {
         let currentBalance = value.balances.length > 0 ? value.balances[0]: null;
         if (currentBalance && currentBalance.year == lowestYear && currentBalance.month == lowestMonth) {
-          balance.income += currentBalance.income;
-          balance.expense += currentBalance.expense;
-          balance.balance += currentBalance.balance;
-          balance.accumulatedBalance += currentBalance.balance;
+          balance.income = this.incrementAndRound(balance.income, currentBalance.income);
+          balance.expense = this.incrementAndRound(balance.expense, currentBalance.expense);
+          balance.balance = this.incrementAndRound(balance.balance, currentBalance.balance);
+          balance.accumulatedBalance = this.incrementAndRound(balance.accumulatedBalance, currentBalance.balance);
           value.balances.shift();
         }
       });
-      
+
       result.balances.push(balance);
       previousBalance = balance;
       lowestMonth++;
@@ -108,6 +108,10 @@ export class MonthlyBalanceService {
     }
 
     this.totalBalanceSubject.next(result);
+  }
+
+  private incrementAndRound(a: number, b: number): number {
+    return Math.round((a+b)*100)/100;
   }
 
   private fetchBalances(account): Observable<BalanceData> {

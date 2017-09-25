@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AccountHttpService } from '../../service/account-http.service';
-import { TransactionService } from '../../service/transaction.service';
+import { TransactionHttpService } from '../../service/transaction-http.service';
 import { TransactionSearch } from '../../dto/transaction-search';
 import { Account } from '../../dto/account';
 
@@ -24,7 +24,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private route: ActivatedRoute, private accountService: AccountHttpService, private transactionService: TransactionService) {
+  constructor(private route: ActivatedRoute, private accountService: AccountHttpService, private transactionService: TransactionHttpService) {
   }
 
   ngOnInit() {

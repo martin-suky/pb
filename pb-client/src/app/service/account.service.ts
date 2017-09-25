@@ -30,4 +30,17 @@ export class AccountService {
     );
     return observable;
   }
+
+  public updateAccount(account: Account): void {
+    this.accountHttpService.getAccount(account.id).subscribe(newAccount => {
+      const value = this.accountsSubject.getValue();
+      const index = value.findIndex(a => a.id === newAccount.id);
+      if (index > -1) {
+        value[index] = newAccount;
+      } else {
+        value.push(newAccount);
+      }
+      this.accountsSubject.next(value);
+    })
+  }
 }

@@ -4,8 +4,8 @@ import { AccountHttpService } from '../../service/account-http.service';
 import { Subscription } from 'rxjs/Subscription';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Account } from '../../dto/account';
-import { TransactionService } from '../../service/transaction.service';
 import { UploadResponse } from '../../dto/upload-response';
+import { TransactionService } from '../../service/transaction.service';
 
 @Component({
   selector: 'app-upload',

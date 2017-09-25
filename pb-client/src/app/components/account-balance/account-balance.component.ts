@@ -46,7 +46,8 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
       this.accountIds = [0];
       this.subscriptions.push(this.balanceService.totalBalance.subscribe(
         data => {
-          this.prepareGraphData(new Map().set(0, data));
+          this.prepared = false;
+          setTimeout(() => this.prepareGraphData(new Map().set(0, data)), 1);
         }
       ));
     }

@@ -24,12 +24,13 @@ import { NotificationComponent } from './components/notification/notification.co
 import { NotificationService } from './service/notification.service';
 import { TitleComponent } from './components/title/title.component';
 import { UploadComponent } from './components/upload/upload.component';
-import { TransactionService } from './service/transaction.service';
+import { TransactionHttpService } from './service/transaction-http.service';
 import { MonthComponent } from './components/month/month.component';
 import { AccountBalanceComponent } from './components/account-balance/account-balance.component';
 import { TotalBalanceComponent } from './components/total-balance/total-balance.component';
 import { AccountService } from './service/account.service';
 import { MonthlyBalanceService } from './service/monthly-balance.service';
+import { TransactionService } from './service/transaction.service';
 
 @NgModule({
   imports: [
@@ -90,6 +91,7 @@ import { MonthlyBalanceService } from './service/monthly-balance.service';
     MonthlyBalanceService,
     MonthlyBalanceHttpService,
     NotificationService,
+    TransactionHttpService,
     TransactionService,
     UserHttpService,
     UserService],
