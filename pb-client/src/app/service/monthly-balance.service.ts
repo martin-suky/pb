@@ -80,7 +80,7 @@ export class MonthlyBalanceService {
 
     let previousBalance: MonthlyBalance= this.getNewBalance();
 
-    while (lowestYear < highestYear || (lowestYear == highestYear && lowestMonth < highestMonth)) {
+    while (lowestYear < highestYear || (lowestYear == highestYear && lowestMonth <= highestMonth)) {
       const balance: MonthlyBalance = this.getNewBalance();
       balance.account = account;
       balance.year = lowestYear;
