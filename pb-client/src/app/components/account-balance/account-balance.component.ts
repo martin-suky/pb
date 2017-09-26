@@ -1,3 +1,4 @@
+import { SimpleDate } from './../../dto/simple-date';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Account } from '../../dto/account';
@@ -58,11 +59,8 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
   }
 
   private prepareGraphData(data: Map<number, BalanceData>): void {
-    let date = new Date();
-    let lowestYear: number = date.getFullYear();
-    let lowestMonth: number = date.getMonth() + 1;
-    let highestYear: number = date.getFullYear();
-    let highestMonth: number = date.getMonth() + 1;
+    let highestDate = SimpleDate.now();
+    let lowestDate = highestDate.clone();
     let countOfGraphs: number = 0;
     let displayedBalanceData: BalanceData[] = [];
     this.lineChartData = [];
@@ -82,33 +80,30 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
     for (let accountBalance of displayedBalanceData) {
       this.lineChartData.push({data: [], label: accountBalance.account.name, yAxisID: 'default'});
       if (accountBalance.balances.length > 0) {
-        const accountLowest = `${accountBalance.balances[0].year}-${accountBalance.balances[0].month}`;
-        const accountHighest = `${accountBalance.balances[accountBalance.balances.length - 1].year}-${accountBalance.balances[accountBalance.balances.length - 1].month}`;
-        if (`${lowestYear}-${lowestMonth}` > accountLowest) {
-          lowestYear = accountBalance.balances[0].year;
-          lowestMonth = accountBalance.balances[0].month;
+        const balanceLowest = accountBalance.balances[0];
+        const balanceHighest = accountBalance.balances[accountBalance.balances.length - 1];
+        
+        const accountLowest = new SimpleDate(balanceLowest.year, balanceLowest.month);
+        const accountHighest = new SimpleDate(balanceHighest.year, balanceHighest.month);
+    
+        if (lowestDate.compareTo(accountLowest) > 0) {
+          lowestDate = accountLowest;
         }
-        if (`${highestYear}-${highestMonth}` < accountHighest) {
-          highestYear = accountBalance.balances[accountBalance.balances.length - 1].year;
-          highestMonth = accountBalance.balances[accountBalance.balances.length - 1].month;
+        if (highestDate.compareTo(accountHighest) < 0) {
+          highestDate = accountHighest;
         }
       }
     }
 
-    let indexYear = lowestYear;
-    let indexMonth = lowestMonth;
-    let highestLabel = `${highestYear}-${highestMonth}`;
-    let indexLabel: string;
     let iteration: number = 0;
     do {
-      indexLabel = `${indexYear}-${indexMonth}`;
-      this.lineChartLabels.push(indexLabel);
+      this.lineChartLabels.push(lowestDate.toString());
       for (let accountBalance of displayedBalanceData) {
         if (iteration == countOfGraphs) {
           iteration = 0;
         }
         let balance = accountBalance.balances.length > 0 ? accountBalance.balances[0]: null;
-        if (balance && balance.year == indexYear && balance.month == indexMonth) {
+        if (balance && lowestDate.equalsToPrimitive(balance.year, balance.month)) {
           this.lineChartData[iteration].data.push(balance.accumulatedBalance);
           accountBalance.balances.shift();
         } else {
@@ -116,12 +111,8 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
         }
         iteration ++;
       }
-      indexMonth++;
-      if (indexMonth == 13) {
-        indexYear ++;
-        indexMonth = 1;
-      }
-    } while (indexLabel < highestLabel);
+      lowestDate = lowestDate.increment();
+    } while (lowestDate.compareTo(highestDate) < 0);
     this.prepared = true;
   }
 

@@ -29,8 +29,15 @@
     </div>
     <div class="column">
       <h2 class="subtitle">Overview</h2>
-      <app-account-balance *ngIf="accounts && accounts.length > 0"></app-account-balance>
-      <app-account-balance *ngIf="accounts && accounts.length > 0" [accounts]="accounts"></app-account-balance>
+      <div class="tabs is-centered">
+        <ul>
+          <li [class.is-active]="activeTab===Tabs.TOTAL_BALANCE"><a (click)="switchTab(Tabs.TOTAL_BALANCE)">Total balance</a></li>
+          <li [class.is-active]="activeTab===Tabs.BALANCE_PER_ACCOUNT"><a (click)="switchTab(Tabs.BALANCE_PER_ACCOUNT)">Balance per accounts</a></li>
+          <li [class.is-active]="activeTab===Tabs.INCOMES_EXPENSES"><a (click)="switchTab(Tabs.INCOMES_EXPENSES)">Incomes / Expenses</a></li>
+        </ul>
+      </div>
+      <app-account-balance *ngIf="accounts && accounts.length > 0 && activeTab===Tabs.TOTAL_BALANCE"></app-account-balance>
+      <app-account-balance *ngIf="accounts && accounts.length > 0 && activeTab===Tabs.BALANCE_PER_ACCOUNT" [accounts]="accounts"></app-account-balance>
     </div>
   </div>
 

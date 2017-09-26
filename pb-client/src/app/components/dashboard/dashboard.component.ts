@@ -12,9 +12,11 @@ import { AccountService } from '../../service/account.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
 
-  public user: User;
-  public totalCash: number = 0;
-  public accounts: Account[];
+  private user: User;
+  private totalCash: number = 0;
+  private accounts: Account[];
+  private activeTab: Tabs = Tabs.TOTAL_BALANCE;
+  private Tabs = Tabs;
 
   private subscriptions: Subscription[] = [];
 
@@ -37,4 +39,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
+  switchTab(tab: Tabs) {
+    this.activeTab = tab;
+  }
+
+}
+
+enum Tabs {
+  TOTAL_BALANCE, BALANCE_PER_ACCOUNT, INCOMES_EXPENSES
 }
