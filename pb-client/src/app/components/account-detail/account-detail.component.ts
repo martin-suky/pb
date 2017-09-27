@@ -1,11 +1,9 @@
-import { Month } from './../month/month.component';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { AccountHttpService } from '../../service/account-http.service';
-import { TransactionHttpService } from '../../service/transaction-http.service';
-import { TransactionSearch } from '../../dto/transaction-search';
 import { Account } from '../../dto/account';
+import { AccountService } from '../../service/account.service';
+import { SimpleDate } from '../../dto/simple-date';
 
 @Component({
   selector: 'app-account-detail',
@@ -15,29 +13,25 @@ import { Account } from '../../dto/account';
 export class AccountDetailComponent implements OnInit, OnDestroy {
 
   public account: Account;
-  public months: Month[] = [];
-  public month: number;
-  public year: number;
-  public currentMonth: number;
-  public currentYear: number;
-  public loading: boolean[] = [];
+  public months: SimpleDate[] = [];
+  public activeDate: SimpleDate;
+  public currentDate: SimpleDate;
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private route: ActivatedRoute, private accountService: AccountHttpService, private transactionService: TransactionHttpService) {
+  constructor(private route: ActivatedRoute, private accountService: AccountService) {
   }
 
   ngOnInit() {
-    let date = new Date();
-    this.month = date.getMonth() + 1;
-    this.year = date.getFullYear();
-    this.currentMonth = this.month;
-    this.currentYear = this.year;
+    this.activeDate = SimpleDate.now();
+    this.currentDate = this.activeDate;
     this.subscriptions.push(this.route.params.map(params => +params['id']).subscribe(
       id => {
         this.subscriptions.push(this.accountService.getAccount(id).subscribe(account => {
-          this.account = account;
-          this.fetchInitialTransactions();
+          if (account) {
+            this.account = account;
+            this.fetchInitialTransactions();
+          }
         }));
       }
     ));
@@ -48,67 +42,29 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   public back(): void {
-    if (this.loading.length > 0) {
-      return;
-    }
-    this.loading.push(true);
     this.months[2] = this.months[1];
     this.months[1] = this.months[0];
     this.months[0] = null;
-    this.month--;
-    if (this.month < 1) {
-      this.month += 12;
-      this.year--;
-    }
-    this.fetchMonth(0, this.month - 2, this.year);
+    this.activeDate = this.activeDate.decrement();
+    this.fetchMonth(0, this.activeDate.decrementTimes(2));
   }
 
   public forward(): void {
-    if (this.loading.length > 0) {
-      return;
-    }
-    this.loading.push(true);
     this.months[0] = this.months[1];
     this.months[1] = this.months[2];
     this.months[2] = null;
-    this.month++;
-    if (this.month > 12) {
-      this.month -= 12;
-      this.year++;
-    }
-    this.fetchMonth(2, this.month, this.year);
+    this.activeDate = this.activeDate.increment();
+    this.fetchMonth(2, this.activeDate);
   }
 
   private fetchInitialTransactions(): void {
-    this.loading.push(true, true, true);
-    this.fetchMonth(0, this.month - 2, this.year);
-    this.fetchMonth(1, this.month - 1, this.year);
-    this.fetchMonth(2, this.month, this.year);
+    this.fetchMonth(0, this.activeDate.decrementTimes(2));
+    this.fetchMonth(1, this.activeDate.decrement());
+    this.fetchMonth(2, this.activeDate);
   }
 
-  private fetchMonth(index: number, month: number, year: number): void {
-    let search = this.getSearch(month, year);
-    this.subscriptions.push(this.transactionService.getTransactions(this.account, search).subscribe(result => {
-      this.months[index] = {
-        month: search.from.getMonth() + 1,
-        year: search.from.getFullYear(),
-        transactions: result
-      };
-      this.loading.pop();
-    }));
-  }
-
-  private getSearch(month: number, year: number): TransactionSearch {
-    if (month < 1) {
-      month += 12;
-      year--;
-    }
-    let from = new Date(year, month - 1, 1);
-    let to = new Date(year, month, 0);
-    return {
-      from: from,
-      to: to
-    }
+  private fetchMonth(index: number, date: SimpleDate): void {
+    this.months[index] = date;
   }
 
 }

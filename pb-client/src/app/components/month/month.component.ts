@@ -1,43 +1,45 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Transaction } from '../../dto/transaction';
+import { SimpleDate } from '../../dto/simple-date';
+import { TransactionService } from '../../service/transaction.service';
+import { Account } from '../../dto/account';
 
 @Component({
   selector: 'app-month',
   templateUrl: './month.component.html',
   styleUrls: ['./month.component.css']
 })
-export class MonthComponent implements OnInit, OnChanges {
+export class MonthComponent implements OnInit {
 
   @Input()
-  public month: Month;
+  public account: Account;
 
+  @Input()
+  public month: SimpleDate;
+
+  public transactions: Transaction[];
   public income: number = 0;
   public expense: number = 0;
   public balance: number = 0;
 
-  constructor() { }
+  constructor(private transactionService: TransactionService) { }
 
   ngOnInit() {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.month && this.month.transactions) {
-      for (let transaction of this.month.transactions) {
-        this.balance+= transaction.amount;
-        if (transaction.amount > 0) {
-          this.income += transaction.amount;
-        } else {
-          this.expense += transaction.amount;
+    this.transactionService.getTransactions(this.account, this.month)
+      .subscribe(transactions => {
+        if (transactions) {
+          this.transactions = transactions
+          for (let transaction of this.transactions) {
+            this.balance+= transaction.amount;
+            if (transaction.amount > 0) {
+              this.income += transaction.amount;
+            } else {
+              this.expense += transaction.amount;
+            }
+          }
         }
-      }
-    }
+      });
   }
 
 }
 
-
-export interface Month {
- month: number,
- year: number,
- transactions: Transaction[]
-}

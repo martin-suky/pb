@@ -11,6 +11,24 @@ export class SimpleDate {
         return new SimpleDate(newYear, newMonth);
     }
 
+    public decrementTimes(times: number): SimpleDate {
+      let result: SimpleDate = this;
+      for (let i = 0; i < times; i++) {
+        result = result.decrement();
+      }
+      return result;
+    }
+
+    public decrement(): SimpleDate {
+      let newMonth = this.month - 1;
+      let newYear = this.year;
+      if (newMonth === 0) {
+        newMonth = 12;
+        newYear --;
+      }
+      return new SimpleDate(newYear, newMonth);
+    }
+
     public compareTo(other: SimpleDate): number {
         return this.comparePrimitiveTo(other.year, other.month);
     }

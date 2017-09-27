@@ -29,14 +29,14 @@
       <td>Amount</td>
     </tr>
     </thead>
-    <tbody *ngIf="month.transactions && month.transactions.length !== 0">
-    <tr *ngFor="let transaction of month.transactions">
+    <tbody *ngIf="transactions && transactions.length !== 0">
+    <tr *ngFor="let transaction of transactions">
       <td>{{transaction.date}}</td>
       <td>{{transaction.description}}</td>
       <td>{{transaction.amount | number:'1.2-2'}}</td>
     </tr>
     </tbody>
-    <tbody *ngIf="month.transactions && month.transactions.length === 0">
+    <tbody *ngIf="transactions && transactions.length === 0">
     <tr>
       <td colspan="2">No transactions..</td>
     </tr>

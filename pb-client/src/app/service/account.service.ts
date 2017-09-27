@@ -18,6 +18,10 @@ export class AccountService {
     );
   }
 
+  public getAccount(id: number): Observable<Account> {
+    return this.accounts.map(accounts => accounts.find(a => a.id === id));
+  }
+
   public saveAccount(accountRequest: CreateAccountRequest): Observable<Account> {
     let observable = this.accountHttpService.saveAccount(accountRequest).publishLast().refCount();
 

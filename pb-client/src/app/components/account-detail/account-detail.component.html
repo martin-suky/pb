@@ -5,14 +5,13 @@
     <div class="column is-4">
       <div class="columns">
         <div class="column is-4">
-          <a class="button is-primary" (click)="back()" [attr.disabled]="loading.length != 0 ? true : null"><span class="icon"><i class="fa fa-arrow-left"></i></span></a>
+          <a class="button is-primary" (click)="back()"><span class="icon"><i class="fa fa-arrow-left"></i></span></a>
         </div>
         <div class="column is-4">
-          Current month: {{month}}/{{year}}
+          Current month: {{currentDate.month}}/{{currentDate.year}}
         </div>
         <div class="column is-4">
-          <a class="button is-primary"  [attr.disabled]="((loading.length != 0) || (currentYear < year || (currentYear == year && currentMonth <= month))) ? true : null"
-             (click)="forward()"><span class="icon"><i class="fa fa-arrow-right"></i></span></a>
+          <a class="button is-primary" (click)="forward()"><span class="icon"><i class="fa fa-arrow-right"></i></span></a>
         </div>
       </div>
     </div>
@@ -20,7 +19,7 @@
   </div>
   <div class="columns">
     <div *ngFor="let month of months" class="column is-4">
-      <app-month [month]="month"></app-month>
+      <app-month [month]="month" [account]="account"></app-month>
     </div>
   </div>
 </div>
