@@ -25,12 +25,12 @@ export class SimpleDate {
         }
     }
 
+    public equals(other: SimpleDate) {
+      return this.equalsToPrimitive(other.year, other.month);
+    }
+
     public equalsToPrimitive(year: number, month: number): boolean {
         return this.year === year && this.month === month;
-    }
-    
-    public clone(): SimpleDate {
-        return new SimpleDate(this.year, this.month);
     }
 
     public toString(): string {

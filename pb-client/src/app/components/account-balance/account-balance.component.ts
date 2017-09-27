@@ -60,7 +60,7 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
 
   private prepareGraphData(data: Map<number, BalanceData>): void {
     let highestDate = SimpleDate.now();
-    let lowestDate = highestDate.clone();
+    let lowestDate = highestDate;
     let countOfGraphs: number = 0;
     let displayedBalanceData: BalanceData[] = [];
     this.lineChartData = [];
@@ -82,15 +82,12 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
       if (accountBalance.balances.length > 0) {
         const balanceLowest = accountBalance.balances[0];
         const balanceHighest = accountBalance.balances[accountBalance.balances.length - 1];
-        
-        const accountLowest = new SimpleDate(balanceLowest.year, balanceLowest.month);
-        const accountHighest = new SimpleDate(balanceHighest.year, balanceHighest.month);
-    
-        if (lowestDate.compareTo(accountLowest) > 0) {
-          lowestDate = accountLowest;
+
+        if (lowestDate.compareTo(balanceLowest.date) > 0) {
+          lowestDate = balanceLowest.date;
         }
-        if (highestDate.compareTo(accountHighest) < 0) {
-          highestDate = accountHighest;
+        if (highestDate.compareTo(balanceHighest.date) < 0) {
+          highestDate = balanceHighest.date;
         }
       }
     }
@@ -103,7 +100,7 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
           iteration = 0;
         }
         let balance = accountBalance.balances.length > 0 ? accountBalance.balances[0]: null;
-        if (balance && lowestDate.equalsToPrimitive(balance.year, balance.month)) {
+        if (balance && lowestDate.equals(balance.date)) {
           this.lineChartData[iteration].data.push(balance.accumulatedBalance);
           accountBalance.balances.shift();
         } else {

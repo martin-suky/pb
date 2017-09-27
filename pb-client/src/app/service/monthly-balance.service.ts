@@ -70,13 +70,12 @@ export class MonthlyBalanceService {
     while (lowestDate.compareTo(highestDate) <= 0) {
       const balance: MonthlyBalance = this.getNewBalance();
       balance.account = account;
-      balance.year = lowestDate.year;
-      balance.month = lowestDate.month;
       balance.accumulatedBalance = previousBalance.accumulatedBalance;
+      this.setDates(balance, lowestDate);
 
       accounts.forEach(value => {
         let currentBalance = value.balances.length > 0 ? value.balances[0]: null;
-        if (currentBalance && lowestDate.equalsToPrimitive(currentBalance.year, currentBalance.month)) {
+        if (currentBalance && lowestDate.equals(currentBalance.date)) {
           balance.income = this.incrementAndRound(balance.income, currentBalance.income);
           balance.expense = this.incrementAndRound(balance.expense, currentBalance.expense);
           balance.balance = this.incrementAndRound(balance.balance, currentBalance.balance);
@@ -99,14 +98,20 @@ export class MonthlyBalanceService {
     map.forEach(value => {
       accounts.push(value.clone());
       if (value.balances && value.balances.length > 0
-         && (lowestDate.comparePrimitiveTo(value.balances[0].year, value.balances[0].month) > 0)) {
-        lowestDate = new SimpleDate(value.balances[0].year, value.balances[0].month);
+         && (lowestDate.compareTo(value.balances[0].date) > 0)) {
+        lowestDate = value.balances[0].date;
       }
     });
     return {
       accounts: accounts,
       lowestDate: lowestDate
     }
+  }
+
+  private setDates(balance: MonthlyBalance, date: SimpleDate): void {
+    balance.year = date.year;
+    balance.month = date.month;
+    balance.date = date;
   }
 
   private incrementAndRound(a: number, b: number): number {
@@ -125,6 +130,7 @@ export class MonthlyBalanceService {
       accumulatedBalance: 0,
       year: 0,
       month: 0,
+      date: null,
       account: null
     };
   }
