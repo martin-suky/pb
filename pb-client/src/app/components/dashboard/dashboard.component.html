@@ -38,6 +38,7 @@
       </div>
       <app-account-balance *ngIf="accounts && accounts.length > 0 && activeTab===Tabs.TOTAL_BALANCE"></app-account-balance>
       <app-account-balance *ngIf="accounts && accounts.length > 0 && activeTab===Tabs.BALANCE_PER_ACCOUNT" [accounts]="accounts"></app-account-balance>
+      <app-account-balance *ngIf="accounts && accounts.length > 0 && activeTab===Tabs.INCOMES_EXPENSES" chartType="bar"></app-account-balance>
     </div>
   </div>
 

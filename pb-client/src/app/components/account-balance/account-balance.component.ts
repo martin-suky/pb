@@ -16,8 +16,10 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
   @Input()
   public accounts: Account[] = [];
 
+  @Input()
+  public chartType = GraphType.LINE;
+
   private accountIds: number[] = [];
-  private chartType = 'line';
   private lineChartData:Array<any>;
   private lineChartLabels:Array<string>;
   private lineChartLegend = true;
@@ -61,7 +63,6 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
   private prepareGraphData(data: Map<number, BalanceData>): void {
     let highestDate = SimpleDate.now();
     let lowestDate = highestDate;
-    let countOfGraphs: number = 0;
     let displayedBalanceData: BalanceData[] = [];
     this.lineChartData = [];
     this.lineChartLabels = [];
@@ -69,7 +70,6 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
     data.forEach(balance => {
       if (this.accountIds.indexOf(balance.account.id) > -1) {
         displayedBalanceData.push(balance.clone());
-        countOfGraphs++;
         this.lineChartData.push({data: [], label: balance.account.name, yAxisID: 'default'});
         if (balance.balances.length > 0) {
           const balanceLowest = balance.balances[0];
@@ -85,17 +85,18 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (countOfGraphs == 0) {
+    if (displayedBalanceData.length == 0) {
       return;
     }
 
+    const countOfGraphs = displayedBalanceData.length;
     do {
       this.lineChartLabels.push(lowestDate.toString());
       for (let i = 0; i < countOfGraphs; i++) {
         const accountBalance = displayedBalanceData[i];
         let balance = accountBalance.balances.length > 0 ? accountBalance.balances[0]: null;
         if (balance && lowestDate.equals(balance.date)) {
-          this.lineChartData[i].data.push(balance.accumulatedBalance);
+          this.lineChartData[i].data.push(this.getDataFromBalance(balance));
           accountBalance.balances.shift();
         } else {
           this.lineChartData[i].data.push(this.getLastBalance(this.lineChartData[i].data));
@@ -103,9 +104,17 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
       }
       lowestDate = lowestDate.increment();
     } while (lowestDate.compareTo(highestDate) < 0);
+
     this.prepared = true;
   }
 
+  private getDataFromBalance(balance: MonthlyBalance) {
+    if (this.chartType === GraphType.LINE) {
+      return balance.accumulatedBalance;
+    } else if (this.chartType === GraphType.BAR) {
+      return balance.balance;
+    }
+  }
 
   private getLastBalance(data: any[]): number {
     if (data.length > 0) {
@@ -114,4 +123,9 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
       return 0;
     }
   }
+}
+
+export class GraphType {
+  public static LINE = 'line';
+  public static BAR = 'bar';
 }
