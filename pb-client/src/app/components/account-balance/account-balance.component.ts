@@ -70,6 +70,18 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
       if (this.accountIds.indexOf(balance.account.id) > -1) {
         displayedBalanceData.push(balance.clone());
         countOfGraphs++;
+        this.lineChartData.push({data: [], label: balance.account.name, yAxisID: 'default'});
+        if (balance.balances.length > 0) {
+          const balanceLowest = balance.balances[0];
+          const balanceHighest = balance.balances[balance.balances.length - 1];
+  
+          if (lowestDate.compareTo(balanceLowest.date) > 0) {
+            lowestDate = balanceLowest.date;
+          }
+          if (highestDate.compareTo(balanceHighest.date) < 0) {
+            highestDate = balanceHighest.date;
+          }
+        }
       }
     });
 
@@ -77,36 +89,17 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
       return;
     }
 
-    for (let accountBalance of displayedBalanceData) {
-      this.lineChartData.push({data: [], label: accountBalance.account.name, yAxisID: 'default'});
-      if (accountBalance.balances.length > 0) {
-        const balanceLowest = accountBalance.balances[0];
-        const balanceHighest = accountBalance.balances[accountBalance.balances.length - 1];
-
-        if (lowestDate.compareTo(balanceLowest.date) > 0) {
-          lowestDate = balanceLowest.date;
-        }
-        if (highestDate.compareTo(balanceHighest.date) < 0) {
-          highestDate = balanceHighest.date;
-        }
-      }
-    }
-
-    let iteration: number = 0;
     do {
       this.lineChartLabels.push(lowestDate.toString());
-      for (let accountBalance of displayedBalanceData) {
-        if (iteration == countOfGraphs) {
-          iteration = 0;
-        }
+      for (let i = 0; i < countOfGraphs; i++) {
+        const accountBalance = displayedBalanceData[i];
         let balance = accountBalance.balances.length > 0 ? accountBalance.balances[0]: null;
         if (balance && lowestDate.equals(balance.date)) {
-          this.lineChartData[iteration].data.push(balance.accumulatedBalance);
+          this.lineChartData[i].data.push(balance.accumulatedBalance);
           accountBalance.balances.shift();
         } else {
-          this.lineChartData[iteration].data.push(this.getLastBalance(this.lineChartData[iteration].data));
+          this.lineChartData[i].data.push(this.getLastBalance(this.lineChartData[i].data));
         }
-        iteration ++;
       }
       lowestDate = lowestDate.increment();
     } while (lowestDate.compareTo(highestDate) < 0);
