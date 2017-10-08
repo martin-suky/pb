@@ -18,6 +18,16 @@
           </div>
         </div>
         <div class="field">
+          <label for="formats" class="label">Format</label>
+          <div class="control">
+            <div class="select">
+              <select *ngIf="bankFormats" name="formats" id="formats" formControlName="format">
+                <option *ngFor="let format of bankFormats" [value]="format.formatName">{{format.formatName}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field">
           <button class="button is-primary">Submit</button>
         </div>
       </form>

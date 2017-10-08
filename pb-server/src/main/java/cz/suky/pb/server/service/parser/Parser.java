@@ -1,9 +1,6 @@
 package cz.suky.pb.server.service.parser;
 
-import cz.suky.pb.server.domain.Account;
-import cz.suky.pb.server.domain.Bank;
-import cz.suky.pb.server.domain.MimeType;
-import cz.suky.pb.server.domain.Transaction;
+import cz.suky.pb.server.domain.*;
 
 import java.io.InputStream;
 import java.util.List;
@@ -13,9 +10,7 @@ import java.util.List;
  */
 public interface Parser {
 
-    Bank getBank();
+    BankFormat getBankFormat();
 
-    MimeType getMimeType();
-
-    List<Transaction> parse(Account account, InputStream inputStream, MimeType mimeType);
+    List<Transaction> parse(Account account, InputStream inputStream, BankFormat bankFormat);
 }

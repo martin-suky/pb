@@ -26,10 +26,9 @@ export class TransactionService {
     return this.transactionsByMonthSubject.asObservable().map(o => o[key]);
   }
 
-  public uploadTransactions(account: Account, file: File): Observable<UploadResponse> {
-    let formData: FormData = new FormData();
-    formData.append('file', file);
-    const observable = this.transactionHttpService.uploadTransactions(account, file).publishLast().refCount();
+  public uploadTransactions(account: Account, file: File, format: string): Observable<UploadResponse> {
+  
+    const observable = this.transactionHttpService.uploadTransactions(account, file, format).publishLast().refCount();
     observable.subscribe(() => {
       this.monthlyBalanceService.updateBalances(account);
       this.accountService.updateAccount(account);

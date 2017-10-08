@@ -1,9 +1,6 @@
 package cz.suky.pb.server.controller;
 
-import cz.suky.pb.server.domain.Account;
-import cz.suky.pb.server.domain.MimeType;
-import cz.suky.pb.server.domain.Transaction;
-import cz.suky.pb.server.domain.User;
+import cz.suky.pb.server.domain.*;
 import cz.suky.pb.server.dto.TransactionSearch;
 import cz.suky.pb.server.dto.UploadResponse;
 import cz.suky.pb.server.exception.AccountException;
@@ -37,10 +34,13 @@ public class TransactionController {
     private ParserOrchestrator parserOrchestrator;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResponseEntity<UploadResponse> upload(User user, @PathVariable Long accountId, @RequestParam MultipartFile file) {
+    public ResponseEntity<UploadResponse> upload(User user, @PathVariable Long accountId, @RequestParam String format, @RequestParam MultipartFile file) {
         Optional<Account> account = accountRepository.findAccountByOwnerAndId(user, accountId);
+        Account a = account.orElseThrow(AccountException::notFound);
+        Optional<BankFormat> bankFormatOptional = a.getBank().getFormats().stream().filter(b -> b.getFormatName().equals(format)).findFirst();
         try {
-            return ResponseEntity.ok(parserOrchestrator.parseAndStore(account.orElseThrow(AccountException::notFound), file.getInputStream(), MimeType.TEXT_HTML));
+            return ResponseEntity.ok(parserOrchestrator.parseAndStore(a, file.getInputStream(),
+                    bankFormatOptional.orElseThrow(() -> AccountException.badRequest("This format isn't valid for selected account."))));
         } catch (IOException e) {
             throw new ParserException("No valid file in data.");
         }

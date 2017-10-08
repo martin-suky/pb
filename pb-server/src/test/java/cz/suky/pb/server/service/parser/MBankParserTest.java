@@ -1,9 +1,6 @@
 package cz.suky.pb.server.service.parser;
 
-import cz.suky.pb.server.domain.Account;
-import cz.suky.pb.server.domain.Bank;
-import cz.suky.pb.server.domain.MimeType;
-import cz.suky.pb.server.domain.Transaction;
+import cz.suky.pb.server.domain.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 public class MBankParserTest {
 
     private Account account;
-    private MBankParser mBankParser;
+    private Parser mBankParser;
 
     @Before
     public void setup() {
@@ -30,14 +27,13 @@ public class MBankParserTest {
         account.setId(1L);
         account.setBank(Bank.MBANK);
 
-        mBankParser = new MBankParser();
-
+        this.mBankParser = new MBankEmailParser(new ParserUtilImpl());
     }
 
     @Test
     public void testParse() throws IOException {
-        try (InputStream inputStream = new FileInputStream("src/test/resource/mKonto_04302659_081001_121110.html")) {
-            List<Transaction> result = mBankParser.parse(account, inputStream, MimeType.TEXT_HTML);
+        try (InputStream inputStream = new FileInputStream("src/test/resource/mKonto_nr_2659    _za_2017-09.htm")) {
+            List<Transaction> result = mBankParser.parse(account, inputStream, BankFormat.MBANK_EMAIL);
             assertNotNull(result);
             assertEquals(9, result.size());
         }

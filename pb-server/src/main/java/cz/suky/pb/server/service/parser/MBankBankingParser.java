@@ -1,6 +1,7 @@
 package cz.suky.pb.server.service.parser;
 
 import cz.suky.pb.server.domain.Bank;
+import cz.suky.pb.server.domain.BankFormat;
 import cz.suky.pb.server.domain.MimeType;
 import cz.suky.pb.server.domain.Transaction;
 import cz.suky.pb.server.exception.ParserException;
@@ -17,13 +18,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by none_ on 06-Nov-16.
  */
 @Service
-public class MBankParser extends HtmlParser {
+public class MBankBankingParser extends HtmlParser {
 
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -31,13 +33,8 @@ public class MBankParser extends HtmlParser {
     private ParserUtil parserUtil;
 
     @Override
-    public Bank getBank() {
-        return Bank.MBANK;
-    }
-
-    @Override
-    public MimeType getMimeType() {
-        return MimeType.TEXT_HTML;
+    public BankFormat getBankFormat() {
+        return BankFormat.MBANK_BANKING;
     }
 
     @Override

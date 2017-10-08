@@ -1,8 +1,6 @@
 package cz.suky.pb.server.service.parser;
 
-import cz.suky.pb.server.domain.Bank;
 import cz.suky.pb.server.domain.BankFormat;
-import cz.suky.pb.server.domain.MimeType;
 import cz.suky.pb.server.domain.Transaction;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,41 +12,46 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+/**
+ * Created by none_ on 06-Nov-16.
+ */
 @Service
-public class INGParser extends HtmlParser {
+public class MBankEmailParser extends HtmlParser {
 
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    private final ParserUtil parserUtil;
 
     @Autowired
-    private ParserUtil parserUtil;
+    public MBankEmailParser(ParserUtil parserUtil) {
+        this.parserUtil = parserUtil;
+    }
 
     @Override
     public BankFormat getBankFormat() {
-        return BankFormat.ING_BANKING;
+        return BankFormat.MBANK_EMAIL;
     }
 
     @Override
     protected List<Transaction> parseHtml(Document parse) {
-        Element table = parse.getElementById("ALL_payments");
-        Elements allTransactions = table.select(".tp-table-line");
+        Element overviewTable = parse.select("table").get(5);
+        Elements rows = overviewTable.select("tr");
         List<Transaction> result = new ArrayList<>();
-
-        for (Element row : allTransactions) {
-            result.add(parseRow(row));
+        for (int i = 2; i < rows.size() -1; i++) {
+            result.add(parseRow(rows.get(i)));
         }
-
         return result;
     }
 
     private Transaction parseRow(Element row) {
         Transaction transaction = new Transaction();
-        LocalDate date = LocalDate.parse(row.select(".transaction-datearrow-width span").first().text(), dateTimeFormatter);
+        Elements tds = row.select("td");
+        LocalDate date = LocalDate.parse(tds.get(2).getAllElements().first().text(), dateTimeFormatter);
         transaction.setDate(LocalDateTime.from(date.atStartOfDay()));
-        transaction.setDescription(row.select(".transaction-detail-width span").first().text());
-        transaction.setAmount(parserUtil.parseAmount(row.select(".tran-amount").first().text()));
+        transaction.setDescription(tds.get(3).text());
+        transaction.setAmount(parserUtil.parseAmount(tds.get(4).text()));
         return transaction;
     }
 }

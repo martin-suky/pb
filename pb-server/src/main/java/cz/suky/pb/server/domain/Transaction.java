@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Created by none_ on 10/31/16.
@@ -53,22 +54,15 @@ public class Transaction extends AbstractEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof Transaction)) return false;
         Transaction that = (Transaction) o;
-
-        if (!date.equals(that.date)) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (!amount.equals(that.amount)) return false;
-        return account.equals(that.account);
+        return Objects.equals(date, that.date) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(account, that.account);
     }
 
     @Override
     public int hashCode() {
-        int result = 31 * date.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + amount.hashCode();
-        result = 31 * result + account.hashCode();
-        return result;
+        return Objects.hash(date, amount, account);
     }
 }

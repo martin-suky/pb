@@ -45,6 +45,11 @@ public class ParserUtilImpl implements ParserUtil {
         MonthlyBalance monthlyBalance;
         MonthlyBalance lowestBalance = null;
         BigDecimal originalBalance = BigDecimal.ZERO;
+
+        if (transactions.isEmpty()) {
+            return;
+        }
+
         Account updatedAccount = accountRepository.getOne(account.getId());
         transactions.sort(Comparator.comparing(Transaction::getDate));
         for (Transaction transaction : transactions) {
@@ -95,23 +100,24 @@ public class ParserUtilImpl implements ParserUtil {
         }
         transactions.sort(Comparator.comparing(Transaction::hashCode));
         existing.sort(Comparator.comparing(Transaction::hashCode));
-        int countOfExisting = existing.size();
 
-        while (iteratorNew < countOfNew) {
-            Transaction newT = transactions.get(iteratorNew);
+        while (true) {
+            Transaction newT = iteratorNew < transactions.size() ? transactions.get(iteratorNew) : null;
             Transaction existingT = iteratorExisting < existing.size() ? existing.get(iteratorExisting) : null;
 
-            if (existingT == null) {
+            if (newT == null) {
+                break;
+            } else if (existingT == null) {
                 result.add(newT);
                 iteratorNew ++;
             } else if (newT.equals(existingT)) {
-                iteratorNew++;
-                iteratorExisting++;
+                iteratorNew ++;
+                iteratorExisting ++;
             } else if (newT.hashCode() <= existingT.hashCode()) {
                 result.add(newT);
-                iteratorNew++;
+                iteratorNew ++;
             } else {
-                iteratorExisting = iteratorExisting < countOfExisting -1 ? iteratorExisting + 1 : countOfExisting - 1;
+                iteratorExisting ++;
             }
         }
 

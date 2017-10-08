@@ -8,13 +8,14 @@ import java.util.List;
  * Created by none_ on 06-Nov-16.
  */
 public enum Bank {
-    MBANK("mBank", Arrays.asList(new File(MimeType.TEXT_HTML, Charset.UTF8))),
-    ING("ING", Arrays.asList(new File(MimeType.TEXT_HTML, Charset.UTF8)));
+    MBANK("mBank", Arrays.asList(BankFormat.MBANK_BANKING,
+                                BankFormat.MBANK_EMAIL)),
+    ING("ING", Arrays.asList(BankFormat.ING_BANKING));
 
     private String name;
-    private List<File> inputs;
+    private List<BankFormat> inputs;
 
-    Bank(String name, List<File> inputs) {
+    Bank(String name, List<BankFormat> inputs) {
         this.name = name;
         this.inputs = inputs;
     }
@@ -23,16 +24,8 @@ public enum Bank {
         return name;
     }
 
-    public List<File> getInputs() {
+    public List<BankFormat> getFormats() {
         return inputs;
     }
 
-    public Charset getCharsetForMimeType(MimeType mimeType) {
-        for (File file : this.getInputs()) {
-            if (file.mimeType.equals(mimeType)) {
-                return file.charset;
-            }
-        }
-        return null;
-    }
 }

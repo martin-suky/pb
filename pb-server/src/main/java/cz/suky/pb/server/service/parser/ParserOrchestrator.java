@@ -1,10 +1,9 @@
 package cz.suky.pb.server.service.parser;
 
 import cz.suky.pb.server.domain.Account;
-import cz.suky.pb.server.domain.MimeType;
+import cz.suky.pb.server.domain.BankFormat;
 import cz.suky.pb.server.dto.UploadResponse;
 
-import javax.transaction.Transactional;
 import java.io.InputStream;
 
 /**
@@ -12,5 +11,5 @@ import java.io.InputStream;
  */
 public interface ParserOrchestrator {
 
-    UploadResponse parseAndStore(Account account, InputStream inputStream, MimeType mimeType);
+    UploadResponse parseAndStore(Account account, InputStream inputStream, BankFormat bankFormat);
 }

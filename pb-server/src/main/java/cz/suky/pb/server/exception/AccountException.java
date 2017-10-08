@@ -28,4 +28,7 @@ public class AccountException extends AbstractServiceException {
     public static AccountException notFound() {
         return new AccountException(HttpStatus.NOT_FOUND, "Account not found.");
     }
+    public static AccountException badRequest(String message) {
+        return new AccountException(HttpStatus.NOT_FOUND, message);
+    }
 }

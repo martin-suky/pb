@@ -11,9 +11,10 @@ export class TransactionHttpService {
 
   constructor(private http: UserHttpService) { }
 
-  public uploadTransactions(account: Account, file: File): Observable<UploadResponse> {
+  public uploadTransactions(account: Account, file: File, format: string): Observable<UploadResponse> {
     let formData: FormData = new FormData();
     formData.append('file', file);
+    formData.append('format', format);
     return this.http.post(`/api/account/${account.id}/transaction/upload`, formData);
   }
 

@@ -1,3 +1,4 @@
+import { BankHttpService } from './service/bank-http.service';
 import { MonthlyBalanceHttpService } from './service/monthly-balance-http.service';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -90,6 +91,7 @@ import { TransactionService } from './service/transaction.service';
   providers: [
     AccountService,
     AccountHttpService,
+    BankHttpService,
     MonthlyBalanceService,
     MonthlyBalanceHttpService,
     NotificationService,
