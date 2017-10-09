@@ -4,6 +4,7 @@
 /pb-client/dist
 /pb-client/tmp
 /pb-client/out-tsc
+/pb-client/target
 /pb-server/target
 
 # dependencies

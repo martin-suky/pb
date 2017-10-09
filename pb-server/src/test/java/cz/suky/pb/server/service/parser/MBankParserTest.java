@@ -30,7 +30,6 @@ public class MBankParserTest {
         this.mBankParser = new MBankBankingParser(new ParserUtilImpl());
     }
 
-    @Test
     public void testParse() throws IOException {
         try (InputStream inputStream = new FileInputStream("src/test/resource/mKonto_nr_2659    _za_2017-09.htm")) {
             List<Transaction> result = mBankParser.parse(account, inputStream, BankFormat.MBANK_EMAIL);

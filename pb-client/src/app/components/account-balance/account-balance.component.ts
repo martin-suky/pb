@@ -19,11 +19,11 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
   @Input()
   public chartType = GraphType.LINE;
 
-  private accountIds: number[] = [];
-  private lineChartData:Array<any>;
-  private lineChartLabels:Array<string>;
-  private lineChartLegend = true;
-  private lineChartOptions:any = {
+  public accountIds: number[] = [];
+  public lineChartData:Array<any>;
+  public lineChartLabels:Array<string>;
+  public lineChartLegend = true;
+  public lineChartOptions:any = {
     responsive: true,
     scales: {
       yAxes: [{
@@ -33,7 +33,7 @@ export class AccountBalanceComponent implements OnInit, OnDestroy {
     }
   };
 
-  private prepared: boolean = false;
+  public prepared: boolean = false;
   private subscriptions: Subscription[] = [];
 
   constructor(private balanceService: MonthlyBalanceService) {

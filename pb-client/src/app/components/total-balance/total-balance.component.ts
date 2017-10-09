@@ -15,11 +15,11 @@ export class TotalBalanceComponent implements OnInit {
   @Input()
   public accounts: Account[] = [];
 
-  private chartType = 'line';
-  private lineChartData:Array<any>;
-  private lineChartLabels:Array<string>;
-  private lineChartLegend = true;
-  private lineChartOptions:any = {
+  public chartType = 'line';
+  public lineChartData:Array<any>;
+  public lineChartLabels:Array<string>;
+  public lineChartLegend = true;
+  public lineChartOptions:any = {
     responsive: true,
     scales: {
       yAxes: [{
@@ -28,7 +28,7 @@ export class TotalBalanceComponent implements OnInit {
       }]
     }
   };
-  private prepared: boolean = false;
+  public prepared: boolean = false;
   private subscriptions: Subscription[] = [];
 
   constructor(private balanceService: MonthlyBalanceHttpService) { }
