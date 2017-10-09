@@ -1,8 +1,6 @@
 package cz.suky.pb.server.service.parser;
 
-import cz.suky.pb.server.domain.Bank;
 import cz.suky.pb.server.domain.BankFormat;
-import cz.suky.pb.server.domain.MimeType;
 import cz.suky.pb.server.domain.Transaction;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,12 +24,12 @@ public class INGParser extends HtmlParser {
     private ParserUtil parserUtil;
 
     @Override
-    public BankFormat getBankFormat() {
-        return BankFormat.ING_BANKING;
+    public List<BankFormat> getBankFormats() {
+        return Collections.singletonList(BankFormat.ING_BANKING);
     }
 
     @Override
-    protected List<Transaction> parseHtml(Document parse) {
+    protected List<Transaction> parseHtml(BankFormat bankFormat, Document parse) {
         Element table = parse.getElementById("ALL_payments");
         Elements allTransactions = table.select(".tp-table-line");
         List<Transaction> result = new ArrayList<>();

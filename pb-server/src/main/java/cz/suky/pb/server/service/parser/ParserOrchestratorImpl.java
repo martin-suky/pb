@@ -38,7 +38,7 @@ public class ParserOrchestratorImpl implements ParserOrchestrator {
     }
 
     private AParser getParser(Bank bank, BankFormat bankFormat) {
-        Optional<AParser> first = parsers.stream().filter(p -> p.getBankFormat().equals(bankFormat)).findFirst();
+        Optional<AParser> first = parsers.stream().filter(p -> p.getBankFormats().contains(bankFormat)).findFirst();
         return first.orElseThrow(() -> new IllegalArgumentException("No parser found for combination of bank:" + bank.getName() + " bank format:" + bankFormat));
     }
 }

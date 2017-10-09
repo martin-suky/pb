@@ -30,9 +30,9 @@ public abstract class HtmlParser extends AParser {
             throw new ParserException("Error while parsing file", e);
         }
 
-        return parseHtml(Jsoup.parse(htmlFile));
+        return parseHtml(bankFormat, Jsoup.parse(htmlFile));
     }
 
-    protected abstract List<Transaction> parseHtml(Document parse);
+    protected abstract List<Transaction> parseHtml(BankFormat bankFormat, Document parse);
 
 }

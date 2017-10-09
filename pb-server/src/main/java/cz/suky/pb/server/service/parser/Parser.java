@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface Parser {
 
-    BankFormat getBankFormat();
+    List<BankFormat> getBankFormats();
 
     List<Transaction> parse(Account account, InputStream inputStream, BankFormat bankFormat);
 }

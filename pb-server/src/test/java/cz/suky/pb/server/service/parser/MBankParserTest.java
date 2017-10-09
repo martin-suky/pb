@@ -27,7 +27,7 @@ public class MBankParserTest {
         account.setId(1L);
         account.setBank(Bank.MBANK);
 
-        this.mBankParser = new MBankEmailParser(new ParserUtilImpl());
+        this.mBankParser = new MBankBankingParser(new ParserUtilImpl());
     }
 
     @Test
