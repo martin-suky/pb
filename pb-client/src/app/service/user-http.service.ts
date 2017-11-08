@@ -8,41 +8,30 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class UserHttpService {
 
-  private user: User;
-  private subscription: Subscription;
-
   constructor(private userService: UserService, private http: Http) {
-    this.subscription = userService.$userObservable.subscribe(
-      value => {
-        this.user = value;
-      }
-    );
   }
 
   public get<T>(url: string, options?: RequestOptionsArgs ): Observable<T> {
-    if (!this.user) {
-      return Observable.of(null);
-    }
-
-    return <Observable<T>> <any> this.http.get(url, this.getOptions(options)).map((value: Response) => {return value.json()});
+    return this.userService.$userObservable.filter(user => user != null).flatMap(user => {
+      return <Observable<T>> <any> this.http.get(url, this.getOptions(options, user)).map((value: Response) => {return value.json()});
+    }).first();
   }
 
   public post<T>(url: string, body: any, options?: RequestOptionsArgs ): Observable<T> {
-    if (!this.user) {
-      return Observable.of(null);
-    }
-
-    return <Observable<T>> <any> this.http.post(url, body, this.getOptions(options)).map((value: Response) => {return value.json()});
+    return this.userService.$userObservable.filter(user => user != null).flatMap(user => {
+      return <Observable<T>> <any> this.http.post(url, body, this.getOptions(options, user)).map((value: Response) => {return value.json()});
+    }).first();
+    
   }
 
-  private getOptions(options: RequestOptionsArgs): RequestOptionsArgs {
+  private getOptions(options: RequestOptionsArgs, user: User): RequestOptionsArgs {
     if (!options) {
       options = {};
     }
     if (!options.headers) {
       options.headers = new Headers();
     }
-    options.headers.append('Authorization', 'Basic ' + btoa(this.user.username + ':' + this.user.password));
+    options.headers.append('Authorization', 'Basic ' + btoa(user.username + ':' + user.password));
 
     return options;
   }
