@@ -27,6 +27,7 @@ export class MonthComponent implements OnInit {
   ngOnInit() {
     this.transactionService.getTransactions(this.account, this.month)
       .subscribe(transactions => {
+        this.reset();
         if (transactions) {
           this.transactions = transactions
           for (let transaction of this.transactions) {
@@ -39,6 +40,13 @@ export class MonthComponent implements OnInit {
           }
         }
       });
+  }
+
+  private reset() {
+    this.transactions = [];
+    this.income = 0;
+    this.expense = 0;
+    this.balance = 0;
   }
 
 }

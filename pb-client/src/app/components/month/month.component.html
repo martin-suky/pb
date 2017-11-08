@@ -30,7 +30,7 @@
     </tr>
     </thead>
     <tbody *ngIf="transactions && transactions.length !== 0">
-    <tr *ngFor="let transaction of transactions">
+    <tr *ngFor="let transaction of transactions" [ngClass]="{'income': transaction.amount >= 0, 'expense': transaction.amount < 0}">
       <td>{{transaction.date}}</td>
       <td>{{transaction.description}}</td>
       <td>{{transaction.amount | number:'1.2-2'}}</td>
