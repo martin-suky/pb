@@ -5,6 +5,7 @@ import cz.suky.pb.server.dto.TransactionSearch;
 import cz.suky.pb.server.dto.UploadResponse;
 import cz.suky.pb.server.exception.AccountException;
 import cz.suky.pb.server.exception.ParserException;
+import cz.suky.pb.server.exception.TransactionException;
 import cz.suky.pb.server.repository.AccountRepository;
 import cz.suky.pb.server.repository.TransactionRepository;
 import cz.suky.pb.server.service.parser.ParserOrchestrator;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.security.auth.login.AccountNotFoundException;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -56,5 +59,16 @@ public class TransactionController {
     public ResponseEntity<List<Transaction>> searchTransaction(User user, @PathVariable Long accountId, @RequestBody final TransactionSearch searchParams) {
         Optional<Account> account = accountRepository.findAccountByOwnerAndId(user, accountId);
         return ResponseEntity.ok(transactionRepository.findByAccountAndDateBetweenOrderByDate(account.orElseThrow(AccountException::notFound), searchParams.getFrom(), searchParams.getTo()));
+    }
+
+    @RequestMapping(value = "/{transactionId}", method = RequestMethod.DELETE)
+    @Transactional
+    public ResponseEntity<Void> deleteTransaction(User user, @PathVariable Long accountId, @PathVariable Long transactionId) {
+        Optional<Account> account = accountRepository.findAccountByOwnerAndId(user, accountId);
+        Long result = transactionRepository.deleteByAccountAndId(account.orElseThrow(AccountException::notFound), transactionId);
+        if (result == 0) {
+            throw TransactionException.notFound();
+        }
+        return ResponseEntity.ok().build();
     }
 }

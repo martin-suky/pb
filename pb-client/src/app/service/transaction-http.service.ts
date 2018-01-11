@@ -22,4 +22,8 @@ export class TransactionHttpService {
     return this.http.post(`/api/account/${account.id}/transaction/search`, search);
   }
 
+  public deleteTransaction(account: Account, transaction: Transaction): Observable<void> {
+    return this.http.delete(`/api/account/${account.id}/transaction/${transaction.id}`);
+  }
+
 }

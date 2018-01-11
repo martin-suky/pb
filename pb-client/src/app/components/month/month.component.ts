@@ -42,6 +42,10 @@ export class MonthComponent implements OnInit {
       });
   }
 
+  public deleteTransaction(transaction: Transaction): void {
+    this.transactionService.deleteTransaction(this.account, this.month, transaction);
+  }
+
   private reset() {
     this.transactions = [];
     this.income = 0;

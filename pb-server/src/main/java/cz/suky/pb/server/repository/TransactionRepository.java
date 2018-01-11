@@ -14,4 +14,6 @@ public interface TransactionRepository extends AbstractEntityRepository<Transact
     List<Transaction> findByAccount(Account accountByOwnerAndId);
 
     List<Transaction> findByAccountAndDateBetweenOrderByDate(Account accountByOwnerAndId, LocalDateTime from, LocalDateTime to);
+
+    Long deleteByAccountAndId(Account account, Long id);
 }

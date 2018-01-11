@@ -24,6 +24,14 @@ export class UserHttpService {
     
   }
 
+
+  public delete<T>(url: string, options?: RequestOptionsArgs ): Observable<void> {
+    return this.userService.$userObservable.filter(user => user != null).flatMap(user => {
+      return <Observable<null>> <any> this.http.delete(url, this.getOptions(options, user)).map((value: Response) => {return null});
+    }).first();
+    
+  }
+
   private getOptions(options: RequestOptionsArgs, user: User): RequestOptionsArgs {
     if (!options) {
       options = {};

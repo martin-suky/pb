@@ -17,6 +17,21 @@ export class TransactionService {
 
   constructor(private transactionHttpService: TransactionHttpService, private monthlyBalanceService: MonthlyBalanceService, private accountService: AccountService) { }
 
+  public deleteTransaction(account: Account, date: SimpleDate, transaction: Transaction): void {
+    const key = `${account.id}-${date.toString()}`;
+    this.transactionHttpService.deleteTransaction(account, transaction).subscribe(
+      () => {
+        const value = this.transactionsByMonthSubject.getValue();
+        const month = value[key];
+        var index = month.indexOf(transaction);
+        if (index > -1) {
+          month.splice(index, 1);
+        }
+        this.transactionsByMonthSubject.next(value);
+      }
+    )
+  }
+
   public getTransactions(account: Account, date: SimpleDate): Observable<Transaction[]> {
     const key = `${account.id}-${date.toString()}`;
     const value = this.transactionsByMonthSubject.getValue();

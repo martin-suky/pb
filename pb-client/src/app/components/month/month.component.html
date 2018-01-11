@@ -27,6 +27,7 @@
       <td>Date</td>
       <td>Description</td>
       <td>Amount</td>
+      <td></td>
     </tr>
     </thead>
     <tbody *ngIf="transactions && transactions.length !== 0">
@@ -34,6 +35,7 @@
       <td>{{transaction.date}}</td>
       <td>{{transaction.description}}</td>
       <td>{{transaction.amount | number:'1.2-2'}}</td>
+      <td><a (click)="deleteTransaction(transaction)"><span class="icon"><i class="fa fa-times" title="Delete transaction"></i></span></a></td>
     </tr>
     </tbody>
     <tbody *ngIf="transactions && transactions.length === 0">
